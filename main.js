@@ -33,3 +33,31 @@ product1.favorite();
 product1.favorite();
 
 console.log(product1);
+
+class ElectronicProduct extends Product {
+  constructor(
+    name,
+    description,
+    price,
+    tags,
+    images,
+    manufacturer,
+    favoriteCount
+  ) {
+    super(name, description, price, tags, images, favoriteCount);
+    this.manufacturer = manufacturer;
+  }
+}
+
+const electronicProduct1 = new ElectronicProduct(
+  "모니터",
+  "QHD 4k",
+  "400000",
+  "전자제품",
+  "https://monitor.co.kr",
+  "LG"
+);
+
+electronicProduct1.favorite();
+
+console.log(electronicProduct1);
