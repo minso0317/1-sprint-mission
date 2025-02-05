@@ -19,7 +19,7 @@ export function getArticleList() {
     });
 }
 
-getArticleList();
+// getArticleList();
 
 export function getArticle(id) {
   fetch(`https://panda-market-api-crud.vercel.app/articles/${id}`)
@@ -37,7 +37,7 @@ export function getArticle(id) {
     });
 }
 
-getArticle(335);
+// getArticle(335);
 
 export function createArticle(title, content, image) {
   fetch("https://panda-market-api-crud.vercel.app/articles", {
@@ -61,7 +61,7 @@ export function createArticle(title, content, image) {
     });
 }
 
-createArticle("노드제이에스", "컴퓨터전공", "https://node.js.good");
+// createArticle("노드제이에스", "컴퓨터전공", "https://node.js.good");
 
 export function patchArticle(id, title, content, image) {
   fetch(`https://panda-market-api-crud.vercel.app/articles/${id}`, {
@@ -85,7 +85,7 @@ export function patchArticle(id, title, content, image) {
     });
 }
 
-patchArticle(300, "타입스크립트", "기본서적", "https://type.script.kr");
+// patchArticle(300, "타입스크립트", "기본서적", "https://type.script.kr");
 
 export function deleteArticle(id) {
   fetch(`https://panda-market-api-crud.vercel.app/articles/${id}`, {
@@ -102,4 +102,4 @@ export function deleteArticle(id) {
     .finally(() => console.log(`ID ${id} 가 삭제되었습니다.`));
 }
 
-deleteArticle(336);
+// deleteArticle(336);

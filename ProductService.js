@@ -1,4 +1,4 @@
-async function getProductList() {
+export async function getProductList() {
   try {
     const url = new URL("https://panda-market-api-crud.vercel.app/products");
     url.searchParams.append("page", 1);
@@ -15,9 +15,9 @@ async function getProductList() {
   }
 }
 
-getProductList();
+// getProductList();
 
-async function getProduct(id) {
+export async function getProduct(id) {
   try {
     const res = await fetch(
       `https://panda-market-api-crud.vercel.app/products/${id}`
@@ -31,9 +31,9 @@ async function getProduct(id) {
   }
 }
 
-getProduct(379);
+// getProduct(379);
 
-async function createProduct(name, description, price, tags, images) {
+export async function createProduct(name, description, price, tags, images) {
   try {
     const res = await fetch(
       "https://panda-market-api-crud.vercel.app/products",
@@ -58,15 +58,15 @@ async function createProduct(name, description, price, tags, images) {
   }
 }
 
-createProduct(
-  "뉴맥북에어",
-  "16GB RAM, 512GB",
-  199,
-  "전자제품",
-  "https://apple.macbook.coopang.kr"
-);
+// createProduct(
+//   "뉴맥북에어",
+//   "16GB RAM, 512GB",
+//   199,
+//   "전자제품",
+//   "https://apple.macbook.coopang.kr"
+// );
 
-async function patchProduct(id, name, description, price, tags, images) {
+export async function patchProduct(id, name, description, price, tags, images) {
   try {
     const res = await fetch(
       `https://panda-market-api-crud.vercel.app/products/${id}`,
@@ -91,16 +91,16 @@ async function patchProduct(id, name, description, price, tags, images) {
   }
 }
 
-patchProduct(
-  391,
-  "구형맥북에어",
-  "구형구정특별할인행사",
-  100,
-  "전자제품",
-  "https://apple3453.co.kr."
-);
+// patchProduct(
+//   391,
+//   "구형맥북에어",
+//   "구형구정특별할인행사",
+//   100,
+//   "전자제품",
+//   "https://apple3453.co.kr."
+// );
 
-async function deleteProduct(id) {
+export async function deleteProduct(id) {
   try {
     const res = await fetch(
       `https://panda-market-api-crud.vercel.app/products/${id}`,
@@ -117,4 +117,4 @@ async function deleteProduct(id) {
   }
 }
 
-deleteProduct(388);
+// deleteProduct(388);

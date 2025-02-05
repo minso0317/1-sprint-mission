@@ -1,3 +1,19 @@
+import {
+  getProductList,
+  getProduct,
+  createProduct,
+  patchProduct,
+  deleteProduct,
+} from "./ProductService.js";
+
+import {
+  getArticleList,
+  getArticle,
+  createArticle,
+  patchArticle,
+  deleteArticle,
+} from "./ArticleService.js";
+
 class Product {
   constructor(name, description, price, tags, images, favoriteCount = 0) {
     this.name = name;
@@ -21,18 +37,15 @@ class Product {
   }
 }
 
-const product1 = new Product(
-  "책상",
-  "높낮이 조절가능",
-  300000,
-  "가구",
-  "https://deskgood.com"
-);
-
-product1.favorite();
-product1.favorite();
-
-console.log(product1);
+// const product1 = new Product(
+//   "책상",
+//   "높낮이 조절가능",
+//   300000,
+//   "가구",
+//   "https://deskgood.com"
+// );
+// product1.favorite();
+// console.log(product1);
 
 class ElectronicProduct extends Product {
   constructor(
@@ -49,18 +62,16 @@ class ElectronicProduct extends Product {
   }
 }
 
-const electronicProduct1 = new ElectronicProduct(
-  "모니터",
-  "QHD 4k",
-  "400000",
-  "전자제품",
-  "https://monitor.co.kr",
-  "LG"
-);
-
-electronicProduct1.favorite();
-
-console.log(electronicProduct1);
+// const electronicProduct1 = new ElectronicProduct(
+//   "모니터",
+//   "QHD 4k",
+//   "400000",
+//   "전자제품",
+//   "https://monitor.co.kr",
+//   "LG"
+// );
+// electronicProduct1.favorite();
+// console.log(electronicProduct1);
 
 class Article {
   constructor(title, content, writer, likeCount = 0, createdAt = new Date()) {
@@ -84,8 +95,6 @@ class Article {
   }
 }
 
-const article1 = new Article("모던자바스크립트", "IT서적", "자바킴");
-
-article1.like();
-
-console.log(article1);
+// const article1 = new Article("모던자바스크립트", "IT서적", "자바킴");
+// article1.like();
+// console.log(article1);
