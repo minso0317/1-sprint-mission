@@ -61,3 +61,31 @@ const electronicProduct1 = new ElectronicProduct(
 electronicProduct1.favorite();
 
 console.log(electronicProduct1);
+
+class Article {
+  constructor(title, content, writer, likeCount = 0, createdAt = new Date()) {
+    this.title = title;
+    this.content = content;
+    this.writer = writer;
+    this._likeCount = likeCount;
+    this.createdAt = createdAt;
+  }
+
+  like() {
+    this._likeCount += 1;
+  }
+
+  get likeCount() {
+    return this._likeCount;
+  }
+
+  set likeCount(value) {
+    throw new Error("좋아요는 수정할 수 없습니다.");
+  }
+}
+
+const article1 = new Article("모던자바스크립트", "IT서적", "자바킴");
+
+article1.like();
+
+console.log(article1);
