@@ -8,7 +8,9 @@ const instance = axios.create({
 export function getArticleList(page, pageSize, keyword) {
   return instance
     .get("/", { params: { page, pageSize, keyword } })
-    .then((res) => console.log(res.data))
+    .then((res) => {
+      return res;
+    })
     .catch((e) => {
       if (e.response) {
         console.log(e.response.headers);
@@ -31,7 +33,7 @@ export function getArticle(id) {
   return instance
     .get(`/${id}`)
     .then((res) => {
-      console.log(res.data);
+      return res;
     })
     .catch((e) => {
       if (e.response) {
@@ -55,7 +57,7 @@ export function createArticle(title, content, image) {
   return instance
     .post("/", { title, content, image })
     .then((res) => {
-      console.log(res.data);
+      return res;
     })
     .catch((e) => {
       if (e.response) {
@@ -79,7 +81,7 @@ export function patchArticle(id, title, content, image) {
   return instance
     .patch(`/${id}`, { title, content, image })
     .then((res) => {
-      console.log(res.data);
+      return res;
     })
     .catch((e) => {
       if (e.response) {
@@ -103,7 +105,7 @@ export function deleteArticle(id) {
   return instance
     .delete(`${id}`)
     .then((res) => {
-      console.log(res.data);
+      return res;
     })
     .catch((e) => {
       if (e.response) {
