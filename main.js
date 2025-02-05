@@ -14,6 +14,8 @@ import {
   deleteArticle,
 } from "./ArticleService.js";
 
+/* ======================= Product 클래스 생성 ======================= */
+
 class Product {
   constructor(name, description, price, tags, images, favoriteCount = 0) {
     this.name = name;
@@ -47,6 +49,8 @@ class Product {
 // product1.favorite();
 // console.log(product1);
 
+/* =================== ElectronicProduct 클래스 생성 =================== */
+
 class ElectronicProduct extends Product {
   constructor(
     name,
@@ -73,6 +77,8 @@ class ElectronicProduct extends Product {
 // electronicProduct1.favorite();
 // console.log(electronicProduct1);
 
+/* ======================= Article 클래스 생성 ======================= */
+
 class Article {
   constructor(title, content, writer, likeCount = 0, createdAt = new Date()) {
     this.title = title;
@@ -98,3 +104,63 @@ class Article {
 // const article1 = new Article("모던자바스크립트", "IT서적", "자바킴");
 // article1.like();
 // console.log(article1);
+
+/* ========================= Product 인스턴스 생성 ========================= */
+console.log("========== getProductList ==========");
+const getProductListRes = await getProductList(1, 10, "");
+
+const products = getProductListRes.data.list.map((element) => {
+  let product;
+  if (element.tags.includes("전자제품")) {
+    product = new ElectronicProduct(
+      element.name,
+      element.description,
+      element.price,
+      element.tags,
+      element.images
+    );
+  } else {
+    product = new Product(
+      element.name,
+      element.description,
+      element.price,
+      element.tags,
+      element.images
+    );
+  }
+  product.favorite();
+  return product;
+});
+console.log(products);
+
+console.log("========== createProduct ==========");
+const createProductRes = await createProduct(
+  "뉴맥북에어",
+  "16GB RAM, 512GB",
+  1990000,
+  ["전자제품"],
+  ["https://apple.macbook.coopang.kr"]
+);
+console.log(createProductRes.data);
+
+console.log("========== getProduct ==========");
+
+const productId = createProductRes.data.id;
+const getProductRes = await getProduct(productId);
+console.log(getProductRes.data);
+
+console.log("========== patchProduct ==========");
+
+const patchProductRes = await patchProduct(
+  productId,
+  "구형맥북에어",
+  "구형특별할인행사",
+  1000000,
+  ["전자제품"],
+  ["https://apple3453.co.kr"]
+);
+console.log(patchProductRes.data);
+
+console.log("========== deleteProduct ==========");
+const deleteProductRes = await deleteProduct(productId);
+console.log(deleteProductRes.data);
