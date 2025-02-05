@@ -1,15 +1,27 @@
-export async function getProductList() {
-  try {
-    const url = new URL("https://panda-market-api-crud.vercel.app/products");
-    url.searchParams.append("page", 1);
-    url.searchParams.append("pageSize", 10);
-    url.searchParams.append("keyword", "");
+import axios from "axios";
 
-    const res = await fetch(url);
-    const data = await res.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
+const instance = axios.create({
+  baseURL: "https://panda-market-api-crud.vercel.app/products",
+  timeout: 10000,
+});
+
+export async function getProductList(page, pageSize, keyword) {
+  let res;
+  try {
+    const res = await instance.get("/", {
+      params: { page, pageSize, keyword },
+    });
+    console.log(res.data);
+  } catch (e) {
+    if (e.response) {
+      console.log(e.response.headers);
+      console.log(e.response.status);
+      console.log(e.response.data);
+    } else if (e.request) {
+      console.log(e.request);
+    } else {
+      console.log("에러가 발생하였습니다.", e.message);
+    }
   } finally {
     console.log("Finished");
   }
@@ -18,41 +30,42 @@ export async function getProductList() {
 // getProductList();
 
 export async function getProduct(id) {
+  let res;
   try {
-    const res = await fetch(
-      `https://panda-market-api-crud.vercel.app/products/${id}`
-    );
-    const data = await res.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
+    res = await instance.get(`/${id}`);
+    console.log(res.data);
+  } catch (e) {
+    if (e.response) {
+      console.log(e.response.headers);
+      console.log(e.response.status);
+      console.log(e.response.data);
+    } else if (e.request) {
+      console.log(e.request);
+    } else {
+      console.log("에러가 발생하였습니다.", e.message);
+    }
   } finally {
     console.log("Finished");
   }
 }
 
-// getProduct(379);
+// getProduct(421);
 
 export async function createProduct(name, description, price, tags, images) {
+  let res;
   try {
-    const res = await fetch(
-      "https://panda-market-api-crud.vercel.app/products",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          description,
-          price,
-          tags,
-          images,
-        }),
-      }
-    );
-    const data = await res.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
+    res = await instance.post("/", { name, description, price, tags, images });
+    console.log(res.data);
+  } catch (e) {
+    if (e.response) {
+      console.log(e.response.headers);
+      console.log(e.response.status);
+      console.log(e.response.data);
+    } else if (e.request) {
+      console.log(e.request);
+    } else {
+      console.log("에러가 발생하였습니다.", e.message);
+    }
   } finally {
     console.log("Finished");
   }
@@ -67,32 +80,33 @@ export async function createProduct(name, description, price, tags, images) {
 // );
 
 export async function patchProduct(id, name, description, price, tags, images) {
+  let res;
   try {
-    const res = await fetch(
-      `https://panda-market-api-crud.vercel.app/products/${id}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          description,
-          price,
-          tags,
-          images,
-        }),
-      }
-    );
-    const data = await res.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
+    res = await instance.patch(`/${id}`, {
+      name,
+      description,
+      price,
+      tags,
+      images,
+    });
+    console.log(res.data);
+  } catch (e) {
+    if (e.response) {
+      console.log(e.response.headers);
+      console.log(e.response.status);
+      console.log(e.response.data);
+    } else if (e.request) {
+      console.log(e.request);
+    } else {
+      console.log("에러가 발생하였습니다.", e.message);
+    }
   } finally {
     console.log("Finished");
   }
 }
 
 // patchProduct(
-//   391,
+//   427,
 //   "구형맥북에어",
 //   "구형구정특별할인행사",
 //   100,
@@ -101,20 +115,23 @@ export async function patchProduct(id, name, description, price, tags, images) {
 // );
 
 export async function deleteProduct(id) {
+  let res;
   try {
-    const res = await fetch(
-      `https://panda-market-api-crud.vercel.app/products/${id}`,
-      {
-        method: "DELETE",
-      }
-    );
-    const data = await res.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error);
+    res = await instance.delete(`/${id}`);
+    console.log(res.data);
+  } catch (e) {
+    if (e.response) {
+      console.log(e.response.headers);
+      console.log(e.response.status);
+      console.log(e.response.data);
+    } else if (e.request) {
+      console.log(e.request);
+    } else {
+      console.log("에러가 발생하였습니다.", e.message);
+    }
   } finally {
     console.log(`ID ${id} 가 삭제되었습니다.`);
   }
 }
 
-// deleteProduct(388);
+// deleteProduct(427);
