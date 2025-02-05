@@ -143,14 +143,15 @@ const createProductRes = await createProduct(
 );
 console.log(createProductRes.data);
 
-console.log("========== getProduct ==========");
-
+console.log("========== productId ==========");
 const productId = createProductRes.data.id;
+console.log(productId);
+
+console.log("========== getProduct ==========");
 const getProductRes = await getProduct(productId);
 console.log(getProductRes.data);
 
 console.log("========== patchProduct ==========");
-
 const patchProductRes = await patchProduct(
   productId,
   "구형맥북에어",
@@ -164,3 +165,43 @@ console.log(patchProductRes.data);
 console.log("========== deleteProduct ==========");
 const deleteProductRes = await deleteProduct(productId);
 console.log(deleteProductRes.data);
+
+/* ========================= Article 인스턴스 생성 ========================= */
+
+console.log("========== getArticleList ==========");
+const getArticleListRes = await getArticleList(1, 10, "");
+
+const articles = getArticleListRes.data.list.map((element) => {
+  const article = new Article(element.title, element.content, element.writer);
+  return article;
+});
+console.log(articles);
+
+console.log("========== createArticleList ==========");
+const createArticleRes = await createArticle(
+  "개발자가 되는방법",
+  "직업소개서",
+  "https://whatshouldidotobecomeadeveloper.how"
+);
+console.log(createArticleRes.data);
+
+console.log("========== articleID ==========");
+const articleID = createArticleRes.data.id;
+console.log(articleID);
+
+console.log("========== getArticle ==========");
+const getArticleRes = await getArticle(articleID);
+console.log(getArticleRes.data);
+
+console.log("========== patchArticle ==========");
+const patchArticleRes = await patchArticle(
+  articleID,
+  "개발 잘 하는 방법",
+  "자기개발",
+  "https://howcanidodevelopitfluently.plese"
+);
+console.log(patchArticleRes.data);
+
+console.log("========== deleteArticle ==========");
+const deleteArticleRes = await deleteArticle(articleID);
+console.log(deleteArticleRes.data);
