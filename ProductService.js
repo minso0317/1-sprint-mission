@@ -11,7 +11,7 @@ export async function getProductList(page, pageSize, keyword) {
     const res = await instance.get("/", {
       params: { page, pageSize, keyword },
     });
-    console.log(res.data);
+    return res;
   } catch (e) {
     if (e.response) {
       console.log(e.response.headers);
@@ -33,7 +33,7 @@ export async function getProduct(id) {
   let res;
   try {
     res = await instance.get(`/${id}`);
-    console.log(res.data);
+    return res;
   } catch (e) {
     if (e.response) {
       console.log(e.response.headers);
@@ -55,7 +55,7 @@ export async function createProduct(name, description, price, tags, images) {
   let res;
   try {
     res = await instance.post("/", { name, description, price, tags, images });
-    console.log(res.data);
+    return res;
   } catch (e) {
     if (e.response) {
       console.log(e.response.headers);
@@ -89,7 +89,7 @@ export async function patchProduct(id, name, description, price, tags, images) {
       tags,
       images,
     });
-    console.log(res.data);
+    return res;
   } catch (e) {
     if (e.response) {
       console.log(e.response.headers);
@@ -118,7 +118,7 @@ export async function deleteProduct(id) {
   let res;
   try {
     res = await instance.delete(`/${id}`);
-    console.log(res.data);
+    return res;
   } catch (e) {
     if (e.response) {
       console.log(e.response.headers);
