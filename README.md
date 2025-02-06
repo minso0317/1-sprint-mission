@@ -47,7 +47,8 @@
 
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)  
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> </br></br></br>
+[![Velog Badge](http://img.shields.io/badge/-Velog-20c997?style=flat&link=본인주소)](https://velog.io/@shinminsoo317/posts) </br></br>
 
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fgjbae1212%2Fhit-counter&count_bg=%23AA3DC8&title_bg=%23D3FFBF&icon=azurefunctions.svg&icon_color=%233AD431&title=codeit+sprint&edge_flat=true)](https://hits.seeyoufarm.com) </div>
