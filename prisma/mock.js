@@ -13,7 +13,7 @@ export const PRODUCTS = [
     description:
       "Apple의 AirPods 프로는 탁월한 사운드 품질과 노이즈 캔슬링 기능을 갖춘 무선 이어폰입니다. 간편한 터치 컨트롤과 긴 배터리 수명을 제공합니다.",
     price: 320000,
-    tag: "Electronics",
+    tags: "Electronics",
     createdAt: "2023-07-14T11:00:00Z",
     updatedAt: "2023-07-14T11:00:00Z",
   },
@@ -22,7 +22,7 @@ export const PRODUCTS = [
     description:
       "아이언맨 디자인으로 유명한 골프 클럽 세트입니다. 고품질 소재와 최신 기술로 제작되어 정밀한 스윙과 멋진 샷을 도와줍니다.",
     price: 850000,
-    tag: "Sports",
+    tags: "Sports",
     createdAt: "2023-07-14T12:00:00Z",
     updatedAt: "2023-07-14T12:00:00Z",
   },
@@ -31,7 +31,7 @@ export const PRODUCTS = [
     description:
       "헤라의 UV 미스트 선스틱은 SPF50+ PA+++로 강력한 자외선 차단과 함께 피부 보습에 도움을 주는 제품입니다. 휴대하기 편리한 스틱 형태로 사용이 간편합니다.",
     price: 28000,
-    tag: "Beauty",
+    tags: "Beauty",
     createdAt: "2023-07-14T17:30:00Z",
     updatedAt: "2023-07-14T17:30:00Z",
   },
@@ -40,7 +40,7 @@ export const PRODUCTS = [
     description:
       "쿠진앤에이의 오믈렛 팬은 오믈렛을 쉽고 빠르게 만들 수 있는 전용 팬입니다. 내열성이 뛰어나며 논스틱 처리로 편리한 사용과 청소가 가능합니다.",
     price: 25000,
-    tag: "Kitchenware",
+    tags: "Kitchenware",
     createdAt: "2023-07-15T13:30:00Z",
     updatedAt: "2023-07-15T13:30:00Z",
   },

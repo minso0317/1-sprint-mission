@@ -4,17 +4,17 @@ import { PRODUCTS, ARTICLES } from "./mock.js";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.deleteMany();
-
   await prisma.product.deleteMany();
 
-  await prisma.user.createMany({
-    data: USERS,
-    skipDuplicates: true,
-  });
+  await prisma.article.deleteMany();
 
   await prisma.product.createMany({
     data: PRODUCTS,
+    skipDuplicates: true,
+  });
+
+  await prisma.article.createMany({
+    data: ARTICLES,
     skipDuplicates: true,
   });
 }
