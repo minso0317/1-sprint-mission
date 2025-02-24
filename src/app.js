@@ -37,4 +37,12 @@ app.patch("/products/:id", async (req, res) => {
   res.status(201).send(product);
 });
 
+app.delete("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  await prisma.product.delete({
+    where: { id },
+  });
+  res.status(204).send("Success delete");
+});
+
 app.listen(process.env.PORT || 3000, () => console.log("Server Started"));
