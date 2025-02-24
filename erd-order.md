@@ -16,20 +16,15 @@
     DATETIME createdAt
     DATETIME updatedAt
   }
-  PRODUCTCOMMENT {
+  COMMENT {
     STRING id PK
     STRING productId FK
-    STRING content
-    DATETIME createdAt
-    DATETIME updatedAt
-  }
-  ARTICLECOMMENT {
-    STRING id PK
     STRING articleId FK
     STRING content
     DATETIME createdAt
     DATETIME updatedAt
   }
-PRODUCT ||--o{ PRODUCTCOMMENT : "belong to"
-ARTICLE ||--o{ ARTICLECOMMENT : "belong to"
+
+PRODUCT ||--o{ COMMENT : "belong to"
+ARTICLE ||--o{ COMMENT : "belong to"
 ```
