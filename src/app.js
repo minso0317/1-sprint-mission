@@ -2,6 +2,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import { PrismaClient, Prisma } from "@prisma/client";
+import { assert } from "superstruct";
+import {
+  CreateProduct,
+  PatchProduct,
+  CreateArticle,
+  PatchArticle,
+} from "./structs.js";
 
 const prisma = new PrismaClient();
 
@@ -98,6 +105,7 @@ app.get(
 app.post(
   "/products",
   asyncHandler(async (req, res) => {
+    assert(req.body, CreateProduct);
     const product = await prisma.product.create({
       data: req.body,
     });
@@ -108,6 +116,7 @@ app.post(
 app.patch(
   "/products/:id",
   asyncHandler(async (req, res) => {
+    assert(req.body, PatchProduct);
     const { id } = req.params;
     const product = await prisma.product.update({
       where: { id },
@@ -196,6 +205,7 @@ app.get(
 app.post(
   "/articles",
   asyncHandler(async (req, res) => {
+    assert(req.body, CreateArticle);
     const article = await prisma.article.create({
       data: req.body,
     });
@@ -206,6 +216,7 @@ app.post(
 app.patch(
   "/articles/:id",
   asyncHandler(async (req, res) => {
+    assert(req.body, PatchArticle);
     const { id } = req.params;
     const article = await prisma.article.update({
       where: { id },
