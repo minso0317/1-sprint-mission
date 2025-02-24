@@ -9,9 +9,53 @@ const app = express();
 app.use(express.json());
 
 // Products API
-
 app.get("/products", async (req, res) => {
-  const products = await prisma.product.findMany();
+  const {
+    offset = 0,
+    limit = 10,
+    order = "newest",
+    name,
+    description,
+  } = req.query;
+  let orderBy;
+  switch (order) {
+    case "oldest":
+      orderBy = { createdAt: "asc" };
+      break;
+    case "newest":
+      orderBy = { createdAt: "desc" };
+    default:
+      orderBy = { createdAt: "desc" };
+  }
+
+  // const products = await prisma.products.findMany({
+  //   orderBy,
+  //   where: {
+  //     name: name ? { contains: name, mode: "insensitive" } : {},
+  //     description: description
+  //       ? { contains: description, mode: "insensitive" }
+  //       : {},
+  //   },
+  //   skip: parseInt(offset),
+  //   take: parseInt(limit),
+  // });
+
+  let where = {};
+
+  if (name) {
+    where.name = { contains: name, mode: "insensitive" };
+  }
+
+  if (description) {
+    where.description = { contains: description, mode: "insensitive" };
+  }
+
+  const products = await prisma.product.findMany({
+    orderBy,
+    where,
+    skip: parseInt(offset),
+    take: parseInt(limit),
+  });
   res.status(200).send(products);
 });
 
@@ -48,9 +92,53 @@ app.delete("/products/:id", async (req, res) => {
 });
 
 // Articles API
-
 app.get("/articles", async (req, res) => {
-  const articles = await prisma.article.findMany();
+  const {
+    offset = 0,
+    limit = 10,
+    order = "newest",
+    title,
+    content,
+  } = req.query;
+  let orderBy;
+  switch (order) {
+    case "oldest":
+      orderBy = { createdAt: "asc" };
+      break;
+    case "newest":
+      orderBy = { createdAt: "desc" };
+    default:
+      orderBy = { createdAt: "desc" };
+  }
+
+  // const articles = await prisma.article.findMany({
+  //   orderBy,
+  //   where: {
+  //     title: title ? { contains: title, mode: "insensitive" } : {},
+  //     content: content
+  //       ? { contains: content, mode: "insensitive" }
+  //       : {},
+  //   },
+  //   skip: parseInt(offset),
+  //   take: parseInt(limit),
+  // });
+
+  let where = {};
+
+  if (title) {
+    where.title = { contains: title, mode: "insensitive" };
+  }
+
+  if (content) {
+    where.content = { contains: content, mode: "insensitive" };
+  }
+
+  const articles = await prisma.article.findMany({
+    orderBy,
+    where,
+    skip: parseInt(offset),
+    take: parseInt(limit),
+  });
   res.status(200).send(articles);
 });
 
