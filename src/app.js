@@ -28,4 +28,13 @@ app.post("/products", async (req, res) => {
   res.status(201).send(product);
 });
 
+app.patch("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  const product = await prisma.product.update({
+    where: { id },
+    data: req.body,
+  });
+  res.status(201).send(product);
+});
+
 app.listen(process.env.PORT || 3000, () => console.log("Server Started"));
