@@ -18,6 +18,13 @@ app.get("/products/:id", async (req, res) => {
   const product = await prisma.product.findUniqueOrThrow({
     where: { id },
   });
+  res.status(200).send(product);
+});
+
+app.post("/products", async (req, res) => {
+  const product = await prisma.product.create({
+    data: req.body,
+  });
   res.status(201).send(product);
 });
 
