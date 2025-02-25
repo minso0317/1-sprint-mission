@@ -30,7 +30,7 @@ model Article {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Comments  Comment?
+  comments  Comment?
 }
 
 model Comment {
