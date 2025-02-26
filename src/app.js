@@ -260,8 +260,20 @@ app.delete(
 app.get(
   "/comments",
   asyncHandler(async (req, res) => {
-    const comments = await prisma.comment.findMany();
-    res.status(200).send(comments);
+    const { cursor } = req.query;
+    const take = 3;
+
+    const comments = await prisma.comment.findMany({
+      take: take,
+      ...(cursor && { skip: 1, cursor: { id: cursor } }),
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
+    const nextCursor = comments.length === take ? comments[take - 1].id : null;
+
+    res.status(200).json({ comments, nextCursor });
   })
 );
 
