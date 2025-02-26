@@ -8,6 +8,8 @@ import {
   PatchProduct,
   CreateArticle,
   PatchArticle,
+  CreateComment,
+  PatchComment,
 } from "./structs.js";
 
 const prisma = new PrismaClient();
@@ -86,6 +88,9 @@ app.get(
       where,
       skip: parseInt(offset),
       take: parseInt(limit),
+      include: {
+        comments: true,
+      },
     });
     res.status(200).send(products);
   })
@@ -97,6 +102,9 @@ app.get(
     const { id } = req.params;
     const product = await prisma.product.findUniqueOrThrow({
       where: { id },
+      include: {
+        comments: true,
+      },
     });
     res.status(200).send(product);
   })
@@ -106,8 +114,12 @@ app.post(
   "/products",
   asyncHandler(async (req, res) => {
     assert(req.body, CreateProduct);
+    req.body;
     const product = await prisma.product.create({
       data: req.body,
+      include: {
+        comments: true,
+      },
     });
     res.status(201).send(product);
   })
@@ -186,6 +198,9 @@ app.get(
       where,
       skip: parseInt(offset),
       take: parseInt(limit),
+      include: {
+        comments: true,
+      },
     });
     res.status(200).send(articles);
   })
@@ -197,7 +212,11 @@ app.get(
     const { id } = req.params;
     const article = await prisma.article.findUniqueOrThrow({
       where: { id },
+      include: {
+        comments: true,
+      },
     });
+
     res.status(200).send(article);
   })
 );
@@ -231,6 +250,63 @@ app.delete(
   asyncHandler(async (req, res) => {
     const { id } = req.params;
     await prisma.article.delete({
+      where: { id },
+    });
+    res.status(204).send("Success delete");
+  })
+);
+
+// Comments API
+app.get(
+  "/comments",
+  asyncHandler(async (req, res) => {
+    const comments = await prisma.comment.findMany();
+    res.status(200).send(comments);
+  })
+);
+
+app.get(
+  "/comments/:id",
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const comment = await prisma.comment.findUniqueOrThrow({
+      where: { id },
+    });
+    res.status(200).send(comment);
+  })
+);
+
+app.post(
+  "/comments",
+  asyncHandler(async (req, res) => {
+    assert(req.body, CreateComment);
+
+    const comment = await prisma.comment.create({
+      data: req.body,
+    });
+    res.status(201).send(comment);
+  })
+);
+
+app.patch(
+  "/comments/:id",
+  asyncHandler(async (req, res) => {
+    assert(req.body, CreateComment);
+    const { id } = req.params;
+
+    const comment = await prisma.comment.update({
+      where: { id },
+      data: req.body,
+    });
+    res.status(201).send(comment);
+  })
+);
+
+app.delete(
+  "/comments/:id",
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    await prisma.comment.delete({
       where: { id },
     });
     res.status(204).send("Success delete");
