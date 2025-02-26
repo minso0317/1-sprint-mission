@@ -303,7 +303,7 @@ app.post(
 app.patch(
   "/comments/:id",
   asyncHandler(async (req, res) => {
-    assert(req.body, CreateComment);
+    assert(req.body, PatchComment);
     const { id } = req.params;
 
     const comment = await prisma.comment.update({
