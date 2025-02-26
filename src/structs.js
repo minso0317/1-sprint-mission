@@ -15,3 +15,11 @@ export const CreateArticle = s.object({
 });
 
 export const PatchArticle = s.partial(CreateArticle);
+
+export const CreateComment = s.object({
+  productId: s.any(),
+  articleId: s.any(),
+  content: s.size(s.string(), null, 300),
+});
+
+export const PatchComment = s.partial(CreateComment);
