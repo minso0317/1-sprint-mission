@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import productRouter from "../routes/product.js";
 import articleRouter from "../routes/article.js";
 import commentRouter from "../routes/comment.js";
+import uploadRouter from "../routes/upload.js";
 
 dotenv.config();
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/products", productRouter);
 app.use("/articles", articleRouter);
 app.use("/comments", commentRouter);
+app.use("/files", uploadRouter);
 
 // error middleware
 app.use((err, req, res, next) => {
