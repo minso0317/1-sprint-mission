@@ -91,7 +91,7 @@
 
 ## 스크린샷
 
-![image](이미지url)
+![sprint](https://velog.velcdn.com/images/shinminsoo317/post/b2edd3e5-9bc8-4381-9c79-ac54d012112f/image.jpg)
 
 ## 멘토에게
 
