@@ -17,13 +17,13 @@ import {
 /* ======================= Product 클래스 생성 ======================= */
 
 class Product {
-  constructor(name, description, price, tags, images, favoriteCount = 0) {
+  constructor(name, description, price, tags, images) {
     this.name = name;
     this.description = description;
     this.price = price;
     this.tags = tags;
     this.images = images;
-    this._favoriteCount = favoriteCount;
+    this._favoriteCount = 0;
   }
 
   favorite() {
@@ -38,16 +38,6 @@ class Product {
     throw new Error("좋아요는 수정할 수 없습니다.");
   }
 }
-
-// const product1 = new Product(
-//   "책상",
-//   "높낮이 조절가능",
-//   300000,
-//   "가구",
-//   "https://deskgood.com"
-// );
-// product1.favorite();
-// console.log(product1);
 
 /* =================== ElectronicProduct 클래스 생성 =================== */
 
@@ -66,26 +56,15 @@ class ElectronicProduct extends Product {
   }
 }
 
-// const electronicProduct1 = new ElectronicProduct(
-//   "모니터",
-//   "QHD 4k",
-//   "400000",
-//   "전자제품",
-//   "https://monitor.co.kr",
-//   "LG"
-// );
-// electronicProduct1.favorite();
-// console.log(electronicProduct1);
-
 /* ======================= Article 클래스 생성 ======================= */
 
 class Article {
-  constructor(title, content, writer, likeCount = 0, createdAt = new Date()) {
+  constructor(title, content, writer, likeCount = 0) {
     this.title = title;
     this.content = content;
     this.writer = writer;
     this._likeCount = likeCount;
-    this.createdAt = createdAt;
+    this.createdAt = new Date();
   }
 
   like() {
@@ -100,10 +79,6 @@ class Article {
     throw new Error("좋아요는 수정할 수 없습니다.");
   }
 }
-
-// const article1 = new Article("모던자바스크립트", "IT서적", "자바킴");
-// article1.like();
-// console.log(article1);
 
 /* ========================= Product 인스턴스 생성 ========================= */
 console.log("========== getProductList ==========");

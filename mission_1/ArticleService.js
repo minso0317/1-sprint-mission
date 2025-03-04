@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const instance = axios.create({
+const pandaMarketApi = axios.create({
   baseURL: "https://panda-market-api-crud.vercel.app/articles",
   timeout: 10000,
 });
 
 export function getArticleList(page, pageSize, keyword) {
-  return instance
+  return pandaMarketApi
     .get("/", { params: { page, pageSize, keyword } })
     .then((res) => {
       return res;
@@ -27,10 +27,8 @@ export function getArticleList(page, pageSize, keyword) {
     });
 }
 
-// getArticleList();
-
 export function getArticle(id) {
-  return instance
+  return pandaMarketApi
     .get(`/${id}`)
     .then((res) => {
       return res;
@@ -51,10 +49,8 @@ export function getArticle(id) {
     });
 }
 
-// getArticle(363);
-
 export function createArticle(title, content, image) {
-  return instance
+  return pandaMarketApi
     .post("/", { title, content, image })
     .then((res) => {
       return res;
@@ -75,10 +71,8 @@ export function createArticle(title, content, image) {
     });
 }
 
-// createArticle("노드제이에스", "컴퓨터전공", "https://node.js.good");
-
 export function patchArticle(id, title, content, image) {
-  return instance
+  return pandaMarketApi
     .patch(`/${id}`, { title, content, image })
     .then((res) => {
       return res;
@@ -99,10 +93,8 @@ export function patchArticle(id, title, content, image) {
     });
 }
 
-// patchArticle(376, "타입스크립트", "기본서적", "https://type.script.kr");
-
 export function deleteArticle(id) {
-  return instance
+  return pandaMarketApi
     .delete(`${id}`)
     .then((res) => {
       return res;
@@ -118,7 +110,5 @@ export function deleteArticle(id) {
         console.log("에러가 발생하였습니다.", e.message);
       }
     })
-    .finally(() => console.log(`ID ${id} 가 삭제되었습니다.`));
+    .finally(() => console.log("Finished"));
 }
-
-// deleteArticle(376);

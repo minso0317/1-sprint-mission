@@ -1,15 +1,22 @@
 {
-  "name": "mission_2",
-  "version": "1.0.0",
-  "description": "use git",
-  "main": "main.js",
+  "dependencies": {
+    "@prisma/client": "^5.4.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "is-uuid": "^1.0.2",
+    "multer": "^1.4.5-lts.1",
+    "prisma": "^5.4.2",
+    "superstruct": "^1.0.3",
+    "nodemon": "^3.1.9",
+    "axios": "^1.7.9"
+  },
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^1.7.9"
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }
