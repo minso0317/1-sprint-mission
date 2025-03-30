@@ -9,18 +9,29 @@ import {
   createComment,
   getCommentList,
 } from "../controllers/productsController.js";
-import auth from "../middlewares/auth.js";
+import { verifyAccessToken } from "../middlewares/auth/verifyToken.js";
+import { verifyProduct } from "../middlewares/auth/verifyProduct.js";
 
 const productsRouter = express.Router();
 
-productsRouter.post("/", auth.verifyAccessToken, withAsync(createProduct));
+productsRouter.post("/", verifyAccessToken, withAsync(createProduct));
 productsRouter.get("/:id", withAsync(getProduct));
-productsRouter.patch("/:id", auth.verifyAccessToken, withAsync(updateProduct));
-productsRouter.delete("/:id", auth.verifyAccessToken, withAsync(deleteProduct));
+productsRouter.patch(
+  "/:id",
+  verifyAccessToken,
+  verifyProduct,
+  withAsync(updateProduct)
+);
+productsRouter.delete(
+  "/:id",
+  verifyAccessToken,
+  verifyProduct,
+  withAsync(deleteProduct)
+);
 productsRouter.get("/", withAsync(getProductList));
 productsRouter.post(
   "/:id/comments",
-  auth.verifyAccessToken,
+  verifyAccessToken,
   withAsync(createComment)
 );
 productsRouter.get("/:id/comments", withAsync(getCommentList));

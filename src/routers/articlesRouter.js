@@ -9,18 +9,29 @@ import {
   createComment,
   getCommentList,
 } from "../controllers/articlesController.js";
-import auth from "../middlewares/auth.js";
+import { verifyAccessToken } from "../middlewares/auth/verifyToken.js";
+import { verifyArticle } from "../middlewares/auth/verifyArticle.js";
 
 const articlesRouter = express.Router();
 
-articlesRouter.post("/", auth.verifyAccessToken, withAsync(createArticle));
+articlesRouter.post("/", verifyAccessToken, withAsync(createArticle));
 articlesRouter.get("/", withAsync(getArticleList));
 articlesRouter.get("/:id", withAsync(getArticle));
-articlesRouter.patch("/:id", auth.verifyAccessToken, withAsync(updateArticle));
-articlesRouter.delete("/:id", auth.verifyAccessToken, withAsync(deleteArticle));
+articlesRouter.patch(
+  "/:id",
+  verifyAccessToken,
+  verifyArticle,
+  withAsync(updateArticle)
+);
+articlesRouter.delete(
+  "/:id",
+  verifyAccessToken,
+  verifyArticle,
+  withAsync(deleteArticle)
+);
 articlesRouter.post(
   "/:id/comments",
-  auth.verifyAccessToken,
+  verifyAccessToken,
   withAsync(createComment)
 );
 articlesRouter.get("/:id/comments", withAsync(getCommentList));

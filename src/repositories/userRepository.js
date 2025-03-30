@@ -17,7 +17,7 @@ async function findByEmail(email) {
 }
 
 async function save(user) {
-  return prismaClient.user.create({
+  return await prismaClient.user.create({
     data: {
       email: user.email,
       nickName: user.nickName,
@@ -27,7 +27,7 @@ async function save(user) {
 }
 
 async function update(id, data) {
-  return prismaClient.user.update({
+  return await prismaClient.user.update({
     where: {
       id,
     },
@@ -36,7 +36,7 @@ async function update(id, data) {
 }
 
 async function createOrUpdate(provider, providerId, email, name) {
-  return prismaClient.user.upsert({
+  return await prismaClient.user.upsert({
     where: { provider, providerId },
     update: { email, name },
     create: { provider, providerId, email, name },
