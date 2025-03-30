@@ -9,6 +9,12 @@ export const verifyAccessToken = expressjwt({
   requestProperty: "user",
 });
 
+export const verifyRefreshToken = expressjwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ["HS256"],
+  getToken: (req) => req.cookies.refreshToken,
+});
+
 export const verifyDecodeAccessToken = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];

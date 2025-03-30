@@ -12,6 +12,13 @@ export const accessTokenLogin = async (req, res) => {
 
   const user = await userService.getUser(email, password);
   const accessToken = userService.createToken(user);
+  const refreshToken = userService.createToken(user, "refresh");
+  await userService.updateUser(user.id, { refreshToken });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
 
   return res.json({ accessToken });
 };
@@ -39,4 +46,19 @@ export async function updateUserPassword(req, res) {
 
   const updatedUser = await userService.updateUserPasswordService(id, password);
   return res.status(200).json(updatedUser);
+}
+
+export async function refreshToken(req, res) {
+  const { refreshToken } = req.cookies;
+  const { userId } = req.auth;
+  const { accessToken, newRefreshToken } =
+    await userService.refreshTokenService(userId, refreshToken);
+  await userService.updateUser(userId, { refreshToken: newRefreshToken });
+  res.cookie("refreshToken", newRefreshToken, {
+    path: "/token/refresh",
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
+  return res.json({ accessToken });
 }

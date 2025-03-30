@@ -26,7 +26,7 @@ async function createUserService(user) {
 }
 
 function filterSensitiveUserData(user) {
-  const { password, ...rest } = user;
+  const { password, refreshToken, ...rest } = user;
   return rest;
 }
 
@@ -51,11 +51,17 @@ async function verifyPassword(inPutPassword, savedPassword) {
   }
 }
 
-function createToken(user) {
+function createToken(user, type) {
   const payload = { userId: user.id };
-  const options = { expiresIn: "1h" };
+  const options = {
+    expiresIn: type === "refresh" ? "2w" : "1h",
+  };
 
   return jwt.sign(payload, process.env.JWT_SECRET, options);
+}
+
+async function updateUser(id, data) {
+  return await userRepository.update(id, data);
 }
 
 async function getUserInfoService(id, data) {
@@ -115,6 +121,18 @@ export async function getUserPoroductList(req, res) {
   res.status(200).send(user);
 }
 
+async function refreshTokenService(userId, refreshToken) {
+  const user = await userRepository.findById(userId);
+  if (!user || user.refreshToken !== refreshToken) {
+    const error = new Error("Unauthorized");
+    error.code = 401;
+    throw error;
+  }
+  const accessToken = createToken(user);
+  const newRefreshToken = createToken(user, "refresh");
+  return { accessToken, newRefreshToken };
+}
+
 export default {
   createUserService,
   getUser,
@@ -124,4 +142,6 @@ export default {
   updateUserService,
   updateUserPasswordService,
   getUserPoroductList,
+  updateUser,
+  refreshTokenService,
 };

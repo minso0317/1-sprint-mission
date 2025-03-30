@@ -5,10 +5,15 @@ import {
   getUserInfo,
   updateUser,
   updateUserPassword,
+  refreshToken,
 } from "../controllers/userController.js";
 import { withAsync } from "../middlewares/withAsync.js";
 import { verifyUser } from "../middlewares/auth/verifyUser.js";
-import { verifyDecodeAccessToken } from "../middlewares/auth/verifyToken.js";
+import {
+  verifyAccessToken,
+  verifyDecodeAccessToken,
+  verifyRefreshToken,
+} from "../middlewares/auth/verifyToken.js";
 import { authenticateUser } from "../middlewares/authenticateUser.js";
 import { getUserPoroductList } from "../services/userService.js";
 
@@ -42,5 +47,6 @@ userRouter.get(
   verifyUser,
   withAsync(getUserPoroductList)
 );
+userRouter.post("/token/refresh", verifyRefreshToken, withAsync(refreshToken));
 
 export default userRouter;

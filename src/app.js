@@ -7,6 +7,7 @@ import productsRouter from "./routers/productsRouter.js";
 import commentsRouter from "./routers/commentsRouter.js";
 import imagesRouter from "./routers/imagesRouter.js";
 import userRouter from "./routers/userRoute.js";
+import cookieParser from "cookie-parser";
 
 import {
   defaultNotFoundHandler,
@@ -14,6 +15,7 @@ import {
 } from "./controllers/errorController.js";
 
 const app = express();
+app.use(cookieParser());
 
 app.use(cors());
 app.use(express.json());
