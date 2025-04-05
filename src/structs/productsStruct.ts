@@ -11,4 +11,10 @@ export const CreateProductBodyStruct = object({
 
 export const GetProductListParamsStruct = PageParamsStruct;
 
-export const UpdateProductBodyStruct = partial(CreateProductBodyStruct);
+export const UpdateProductBodyStruct = object({
+  name: coerce(nonempty(string()), string(), (value) => value.trim()),
+  description: nonempty(string()),
+  price: min(integer(), 0),
+  tags: array(nonempty(string())),
+  images: array(nonempty(string())),
+});
