@@ -1,5 +1,4 @@
 import { create } from 'superstruct';
-import { UnauthorizedError } from 'express-jwt';
 import {
   CreateArticleBodyStruct,
   GetArticleListParamsStruct,
@@ -8,6 +7,7 @@ import {
 import { request, Request, Response } from 'express';
 import {
   createArticleService,
+  createCommentService,
   deleteArticleServiec,
   getArticleDetailService,
   getArticleListService,
@@ -15,10 +15,12 @@ import {
 } from '../services/articlesService';
 import { IdParamsStruct } from '../structs/commonStructs';
 import ForbiddenError from '../lib/errors/ForbiddenError';
+import { CreateCommentBodyStruct } from '../structs/commentsStruct';
+import UnauthorizedError from '../lib/errors/UnauthorizedError';
 
 export const createArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
-    throw new UnauthorizedError('credentials_required', { message: 'Unauthorized' });
+    throw new UnauthorizedError('credentials_required');
   }
   const data = create(req.body, CreateArticleBodyStruct);
 
@@ -37,7 +39,7 @@ export const getArticleDetail = async (req: Request, res: Response): Promise<voi
 
 export const updateArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
-    throw new UnauthorizedError('credentials_required', { message: 'Unauthorized' });
+    throw new UnauthorizedError('credentials_required');
   }
 
   const { id } = create(req.params, IdParamsStruct);
@@ -55,7 +57,7 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
 
 export const deleteArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
-    throw new UnauthorizedError('credentials_required', { message: 'Unauthorized' });
+    throw new UnauthorizedError('credentials_required');
   }
   const { id } = create(req.params, IdParamsStruct);
   const article = await getArticleDetailService(id);
@@ -76,4 +78,17 @@ export const getArticleList = async (req: Request, res: Response): Promise<void>
   const article = await getArticleListService({ page, pageSize, orderBy, keyword });
 
   res.status(200).json(article);
+};
+
+export const createComment = async (req: Request, res: Response): Promise<void> => {
+  if (!req.user) {
+    throw new UnauthorizedError('credentials_required');
+  }
+
+  const { id: articleId } = create(req.params, IdParamsStruct);
+  const { content } = create(req.body, CreateCommentBodyStruct);
+
+  const comment = await createCommentService({ articleId, content, userId: req.user.id });
+
+  res.status(201).send(comment);
 };

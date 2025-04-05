@@ -1,6 +1,8 @@
+import { CreateProductCommentDTO } from '../DTO/commentDTO';
 import { ParamsDTO } from '../DTO/commonDTO';
 import { CreateProductDTO, GetProductDTO, UpdateProductDTO } from '../DTO/productDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
+import { createProductComment } from '../repositories/commentRepository';
 import {
   createProduct,
   deleteProduct,
@@ -81,4 +83,25 @@ export async function getProductListService({
   });
 
   return products;
+}
+
+export async function createCommentService({
+  id,
+  productId,
+  content,
+  userId,
+}: CreateProductCommentDTO): Promise<CreateProductCommentDTO> {
+  const existingProduct = await getById(productId);
+  if (!existingProduct) {
+    throw new NotFoundError('product', productId);
+  }
+
+  const comment = await createProductComment({ id, productId, content, userId });
+
+  return {
+    id: comment.id,
+    productId: comment.productId!,
+    content: comment.content,
+    userId: comment.userId,
+  };
 }

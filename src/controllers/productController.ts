@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import {
+  createCommentService,
   createProductService,
   deleteProductService,
   getProductListService,
@@ -15,6 +16,7 @@ import {
 import { create } from 'superstruct';
 import { IdParamsStruct } from '../structs/commonStructs';
 import ForbiddenError from '../lib/errors/ForbiddenError';
+import { CreateCommentBodyStruct } from '../structs/commentsStruct';
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -78,4 +80,17 @@ export const getProductList = async (req: Request, res: Response): Promise<void>
   const getProducts = await getProductListService({ page, pageSize, orderBy, keyword });
 
   res.status(200).json(getProducts);
+};
+
+export const createComment = async (req: Request, res: Response): Promise<void> => {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const { id: productId } = create(req.params, IdParamsStruct);
+  const { content } = create(req.body, CreateCommentBodyStruct);
+
+  const comment = await createCommentService({ productId, content, userId: req.user.id });
+
+  res.status(201).send(comment);
 };
