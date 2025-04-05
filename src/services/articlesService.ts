@@ -1,11 +1,18 @@
-import { CreateArticleDTO, GetArticleDTO, UpdateArticleDTO } from '../DTO/articleDTO';
+import {
+  CreateArticleDTO,
+  GetArticleDTO,
+  ParamsArticleDTO,
+  UpdateArticleDTO,
+} from '../DTO/articleDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
 import {
   createArticle,
   deleteArticle,
+  getArticles,
   getById,
   updateArticle,
 } from '../repositories/articlesRepository';
+import Article from '../types/article';
 
 export const createArticleService = async (
   data: CreateArticleDTO,
@@ -23,7 +30,7 @@ export const createArticleService = async (
   return await createArticle(articleData);
 };
 
-export const getArticleService = async (id: number): Promise<GetArticleDTO> => {
+export const getArticleDetailService = async (id: number): Promise<GetArticleDTO> => {
   const article = await getById(id);
 
   if (!article) {
@@ -54,4 +61,24 @@ export const deleteArticleServiec = async (id: number): Promise<void> => {
   }
 
   await deleteArticle(id);
+};
+
+export const getArticleListService = async ({
+  page,
+  pageSize,
+  orderBy,
+  keyword,
+}: ParamsArticleDTO): Promise<Article[]> => {
+  const where = {
+    title: keyword ? { contains: keyword } : undefined,
+  };
+
+  const articles = await getArticles({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
+    where,
+  });
+
+  return articles;
 };

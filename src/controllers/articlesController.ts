@@ -1,11 +1,16 @@
 import { create } from 'superstruct';
 import { UnauthorizedError } from 'express-jwt';
-import { CreateArticleBodyStruct, UpdateArticleBodyStruct } from '../structs/articlesStructs';
+import {
+  CreateArticleBodyStruct,
+  GetArticleListParamsStruct,
+  UpdateArticleBodyStruct,
+} from '../structs/articlesStructs';
 import { request, Request, Response } from 'express';
 import {
   createArticleService,
   deleteArticleServiec,
-  getArticleService,
+  getArticleDetailService,
+  getArticleListService,
   updateArticleService,
 } from '../services/articlesService';
 import { IdParamsStruct } from '../structs/commonStructs';
@@ -22,10 +27,10 @@ export const createArticle = async (req: Request, res: Response): Promise<void> 
   res.status(201).json(article);
 };
 
-export const getArticle = async (req: Request, res: Response): Promise<void> => {
+export const getArticleDetail = async (req: Request, res: Response): Promise<void> => {
   const { id } = create(req.params, IdParamsStruct);
 
-  const article = await getArticleService(id);
+  const article = await getArticleDetailService(id);
 
   res.status(200).json(article);
 };
@@ -37,7 +42,7 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
 
   const { id } = create(req.params, IdParamsStruct);
   const data = create(req.body, UpdateArticleBodyStruct);
-  const article = await getArticleService(id);
+  const article = await getArticleDetailService(id);
 
   if (article.userId !== req.user.id) {
     throw new ForbiddenError('Should be the owner of the article');
@@ -53,7 +58,7 @@ export const deleteArticle = async (req: Request, res: Response): Promise<void> 
     throw new UnauthorizedError('credentials_required', { message: 'Unauthorized' });
   }
   const { id } = create(req.params, IdParamsStruct);
-  const article = await getArticleService(id);
+  const article = await getArticleDetailService(id);
 
   if (article.userId !== req.user.id) {
     throw new ForbiddenError('Should be the owner of the article');
@@ -63,4 +68,12 @@ export const deleteArticle = async (req: Request, res: Response): Promise<void> 
 
   res.status(204).json();
   return;
+};
+
+export const getArticleList = async (req: Request, res: Response): Promise<void> => {
+  const { page, pageSize, orderBy, keyword } = create(req.query, GetArticleListParamsStruct);
+
+  const article = await getArticleListService({ page, pageSize, orderBy, keyword });
+
+  res.status(200).json(article);
 };
