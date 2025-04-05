@@ -1,9 +1,5 @@
-import {
-  CreateArticleDTO,
-  GetArticleDTO,
-  ParamsArticleDTO,
-  UpdateArticleDTO,
-} from '../DTO/articleDTO';
+import { CreateArticleDTO, GetArticleDTO, UpdateArticleDTO } from '../DTO/articleDTO';
+import { ParamsDTO } from '../DTO/commonDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
 import {
   createArticle,
@@ -12,7 +8,6 @@ import {
   getById,
   updateArticle,
 } from '../repositories/articlesRepository';
-import Article from '../types/article';
 
 export const createArticleService = async (
   data: CreateArticleDTO,
@@ -68,7 +63,7 @@ export const getArticleListService = async ({
   pageSize,
   orderBy,
   keyword,
-}: ParamsArticleDTO): Promise<Article[]> => {
+}: ParamsDTO): Promise<GetArticleDTO[]> => {
   const where = {
     title: keyword ? { contains: keyword } : undefined,
   };

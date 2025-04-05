@@ -5,6 +5,7 @@ import {
   createProduct,
   deleteProduct,
   getPorduct,
+  getProductList,
   updateProduct,
 } from '../controllers/productController';
 
@@ -14,5 +15,6 @@ productRouter.post('/', authenticate(), withAsync(createProduct));
 productRouter.get('/:id', authenticate({ optional: true }), withAsync(getPorduct));
 productRouter.patch('/:id', authenticate(), withAsync(updateProduct));
 productRouter.delete('/:id', authenticate(), withAsync(deleteProduct));
+productRouter.get('/', authenticate({ optional: true }), withAsync(getProductList));
 
 export default productRouter;

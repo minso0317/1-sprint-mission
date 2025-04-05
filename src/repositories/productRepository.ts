@@ -25,3 +25,12 @@ export async function deleteProduct(id: number): Promise<Product> {
     where: { id },
   });
 }
+
+export async function getProduct(args: {
+  skip: number;
+  take: number;
+  orderBy: Prisma.ProductOrderByWithRelationInput;
+  where: any;
+}) {
+  return await prismaClient.product.findMany({ ...args });
+}

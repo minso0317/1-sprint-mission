@@ -3,10 +3,15 @@ import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import {
   createProductService,
   deleteProductService,
+  getProductListService,
   getProductService,
   updateProductService,
 } from '../services/productService';
-import { CreateProductBodyStruct, UpdateProductBodyStruct } from '../structs/productsStruct';
+import {
+  CreateProductBodyStruct,
+  GetProductListParamsStruct,
+  UpdateProductBodyStruct,
+} from '../structs/productsStruct';
 import { create } from 'superstruct';
 import { IdParamsStruct } from '../structs/commonStructs';
 import ForbiddenError from '../lib/errors/ForbiddenError';
@@ -65,4 +70,12 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
   const deleteProduct = await deleteProductService(id);
 
   res.status(204).json();
+};
+
+export const getProductList = async (req: Request, res: Response): Promise<void> => {
+  const { page, pageSize, orderBy, keyword } = create(req.query, GetProductListParamsStruct);
+
+  const getProducts = await getProductListService({ page, pageSize, orderBy, keyword });
+
+  res.status(200).json(getProducts);
 };
