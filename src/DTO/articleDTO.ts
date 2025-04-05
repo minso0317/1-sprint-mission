@@ -33,13 +33,3 @@ export interface UpdateArticleDTO {
   content?: string;
   image?: string | null;
 }
-
-export type OrderByOption = 'recent' | 'oldest' | undefined;
-
-export interface ParamsArticleDTO {
-  page: number;
-  pageSize: number;
-  orderBy?: OrderByOption;
-  keyword?: string;
-  currentUserId?: number;
-}

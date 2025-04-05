@@ -1,6 +1,6 @@
 import { CreateArticleDTO, GetArticleDTO, UpdateArticleDTO } from '../DTO/articleDTO';
-import { CreateArticleCommentDTO, CreateProductCommentDTO } from '../DTO/commentDTO';
-import { ParamsDTO } from '../DTO/commonDTO';
+import { CreateArticleCommentDTO } from '../DTO/commentDTO';
+import { cursorPagenation, ParamsDTO } from '../DTO/commonDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
 import {
   createArticle,
@@ -9,7 +9,7 @@ import {
   getById,
   updateArticle,
 } from '../repositories/articlesRepository';
-import { createArticleComment } from '../repositories/commentRepository';
+import { createArticleComment, getArticleComment } from '../repositories/commentRepository';
 
 export const createArticleService = async (
   data: CreateArticleDTO,
@@ -88,7 +88,7 @@ export async function createCommentService({
 }: CreateArticleCommentDTO): Promise<CreateArticleCommentDTO> {
   const existingArticle = await getById(articleId);
   if (!existingArticle) {
-    throw new NotFoundError('product', articleId);
+    throw new NotFoundError('article', articleId);
   }
 
   const comment = await createArticleComment({ id, articleId, content, userId });
@@ -99,4 +99,26 @@ export async function createCommentService({
     content: comment.content,
     userId: comment.userId,
   };
+}
+
+export async function getArticleCommentService({
+  articleId,
+  cursor,
+  limit,
+}: {
+  articleId: number;
+  cursor?: number;
+  limit: number;
+}): Promise<cursorPagenation> {
+  const article = await getById(articleId);
+  if (!article) {
+    throw new NotFoundError('article', articleId);
+  }
+
+  const getComment = await getArticleComment(articleId, cursor, limit);
+  const comments = getComment.slice(0, limit);
+  const cursorComment = getComment[comments.length - 1];
+  const nextCursor = cursorComment ? cursorComment.id : null;
+
+  return { comments, nextCursor };
 }

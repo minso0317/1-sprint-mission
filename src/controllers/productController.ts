@@ -4,6 +4,7 @@ import {
   createCommentService,
   createProductService,
   deleteProductService,
+  getProductCommentService,
   getProductListService,
   getProductService,
   updateProductService,
@@ -16,7 +17,7 @@ import {
 import { create } from 'superstruct';
 import { IdParamsStruct } from '../structs/commonStructs';
 import ForbiddenError from '../lib/errors/ForbiddenError';
-import { CreateCommentBodyStruct } from '../structs/commentsStruct';
+import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -93,4 +94,17 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
   const comment = await createCommentService({ productId, content, userId: req.user.id });
 
   res.status(201).send(comment);
+};
+
+export const getCommentList = async (req: Request, res: Response): Promise<void> => {
+  const { id: productId } = create(req.params, IdParamsStruct);
+  const { cursor, limit } = create(req.query, GetCommentListParamsStruct);
+
+  const { comments, nextCursor } = await getProductCommentService({
+    productId,
+    cursor,
+    limit,
+  });
+
+  res.status(200).json({ list: comments, nextCursor });
 };

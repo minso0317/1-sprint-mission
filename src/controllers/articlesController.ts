@@ -9,13 +9,14 @@ import {
   createArticleService,
   createCommentService,
   deleteArticleServiec,
+  getArticleCommentService,
   getArticleDetailService,
   getArticleListService,
   updateArticleService,
 } from '../services/articlesService';
 import { IdParamsStruct } from '../structs/commonStructs';
 import ForbiddenError from '../lib/errors/ForbiddenError';
-import { CreateCommentBodyStruct } from '../structs/commentsStruct';
+import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
 
 export const createArticle = async (req: Request, res: Response): Promise<void> => {
@@ -91,4 +92,17 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
   const comment = await createCommentService({ articleId, content, userId: req.user.id });
 
   res.status(201).send(comment);
+};
+
+export const getCommentList = async (req: Request, res: Response): Promise<void> => {
+  const { id: articleId } = create(req.params, IdParamsStruct);
+  const { cursor, limit } = create(req.query, GetCommentListParamsStruct);
+
+  const { comments, nextCursor } = await getArticleCommentService({
+    articleId,
+    cursor,
+    limit,
+  });
+
+  res.status(200).json({ list: comments, nextCursor });
 };

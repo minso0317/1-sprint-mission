@@ -7,6 +7,7 @@ import {
   getArticleDetail,
   updateArticle,
   createComment,
+  getCommentList,
 } from '../controllers/articlesController';
 import { authenticate } from '../middlewares/authenticate';
 
@@ -18,5 +19,6 @@ articleRouter.patch('/:id', authenticate(), withAsync(updateArticle));
 articleRouter.delete('/:id', authenticate(), withAsync(deleteArticle));
 articleRouter.get('/', authenticate({ optional: true }), withAsync(getArticleList));
 articleRouter.post('/:id/comments', authenticate(), withAsync(createComment));
+articleRouter.get('/:id/comments', authenticate({ optional: true }), withAsync(getCommentList));
 
 export default articleRouter;

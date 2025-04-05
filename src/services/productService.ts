@@ -1,8 +1,9 @@
+import { Comment } from '@prisma/client';
 import { CreateProductCommentDTO } from '../DTO/commentDTO';
-import { ParamsDTO } from '../DTO/commonDTO';
+import { cursorPagenation, ParamsDTO } from '../DTO/commonDTO';
 import { CreateProductDTO, GetProductDTO, UpdateProductDTO } from '../DTO/productDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
-import { createProductComment } from '../repositories/commentRepository';
+import { createProductComment, getProductComment } from '../repositories/commentRepository';
 import {
   createProduct,
   deleteProduct,
@@ -104,4 +105,26 @@ export async function createCommentService({
     content: comment.content,
     userId: comment.userId,
   };
+}
+
+export async function getProductCommentService({
+  productId,
+  cursor,
+  limit,
+}: {
+  productId: number;
+  cursor?: number;
+  limit: number;
+}): Promise<cursorPagenation> {
+  const product = await getById(productId);
+  if (!product) {
+    throw new NotFoundError('product', productId);
+  }
+
+  const getComment = await getProductComment(productId, cursor, limit);
+  const comments = getComment.slice(0, limit);
+  const cursorComment = getComment[comments.length - 1];
+  const nextCursor = cursorComment ? cursorComment.id : null;
+
+  return { comments, nextCursor };
 }

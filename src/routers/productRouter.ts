@@ -5,6 +5,7 @@ import {
   createComment,
   createProduct,
   deleteProduct,
+  getCommentList,
   getPorduct,
   getProductList,
   updateProduct,
@@ -18,5 +19,6 @@ productRouter.patch('/:id', authenticate(), withAsync(updateProduct));
 productRouter.delete('/:id', authenticate(), withAsync(deleteProduct));
 productRouter.get('/', authenticate({ optional: true }), withAsync(getProductList));
 productRouter.post('/:id/comments', authenticate(), withAsync(createComment));
+productRouter.get('/:id/comments', authenticate({ optional: true }), withAsync(getCommentList));
 
 export default productRouter;

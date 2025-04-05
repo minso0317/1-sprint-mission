@@ -18,8 +18,20 @@ export interface CreateArticleCommentDTO {
   userId: number;
 }
 
+export interface GetArticleCommentDTO {
+  content: string;
+  articleId: number;
+  userId: number;
+}
+
 export interface CreateProductCommentDTO {
   id?: number;
+  content: string;
+  productId: number;
+  userId: number;
+}
+
+export interface GetProductCommentDTO {
   content: string;
   productId: number;
   userId: number;
