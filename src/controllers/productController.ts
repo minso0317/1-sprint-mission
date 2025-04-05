@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import {
   createProductService,
+  deleteProductService,
   getProductService,
   updateProductService,
 } from '../services/productService';
@@ -46,4 +47,22 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
   const updatedProduct = await updateProductService(id, { name, description, price, tags, images });
 
   res.status(200).json(updatedProduct);
+};
+
+export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const { id } = create(req.params, IdParamsStruct);
+
+  const product = await getProductService(id);
+
+  if (product.userId !== req.user.id) {
+    throw new ForbiddenError('Should be the owner of the product');
+  }
+
+  const deleteProduct = await deleteProductService(id);
+
+  res.status(204).json();
 };

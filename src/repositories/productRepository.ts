@@ -19,3 +19,9 @@ export async function updateProduct(id: number, data: Prisma.ProductUpdateInput)
     data,
   });
 }
+
+export async function deleteProduct(id: number): Promise<Product> {
+  return await prismaClient.product.delete({
+    where: { id },
+  });
+}

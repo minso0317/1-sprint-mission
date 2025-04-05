@@ -1,6 +1,11 @@
 import { CreateProductDTO, GetProductDTO, UpdateProductDTO } from '../DTO/productDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
-import { createProduct, getById, updateProduct } from '../repositories/productRepository';
+import {
+  createProduct,
+  deleteProduct,
+  getById,
+  updateProduct,
+} from '../repositories/productRepository';
 
 export async function createProductService(
   data: CreateProductDTO,
@@ -39,4 +44,14 @@ export async function updateProductService(
   }
 
   return await updateProduct(id, data);
+}
+
+export async function deleteProductService(id: number) {
+  const product = await getById(id);
+
+  if (!product) {
+    throw new NotFoundError('product', id);
+  }
+
+  return await deleteProduct(id);
 }
