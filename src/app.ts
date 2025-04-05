@@ -5,7 +5,8 @@ import cookieParser from 'cookie-parser';
 import { PORT, PUBLIC_PATH, STATIC_PATH } from './lib/constants';
 import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController';
 import authRouter from './routers/authRouer';
-import articleRoute from './routers/articleRouter';
+import articleRouter from './routers/articleRouter';
+import productRouter from './routers/productRouter';
 
 const app = express();
 
@@ -15,7 +16,8 @@ app.use(cookieParser());
 app.use(STATIC_PATH, express.static(path.resolve(process.cwd(), PUBLIC_PATH)));
 
 app.use('/auth', authRouter);
-app.use('/articles', articleRoute);
+app.use('/articles', articleRouter);
+app.use('/products', productRouter);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);

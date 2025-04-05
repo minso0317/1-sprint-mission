@@ -9,12 +9,12 @@ import {
 } from '../controllers/articlesController';
 import { authenticate } from '../middlewares/authenticate';
 
-const articleRoute = express.Router();
+const articleRouter = express.Router();
 
-articleRoute.post('/', authenticate(), withAsync(createArticle));
-articleRoute.get('/:id', authenticate({ optional: true }), withAsync(getArticleDetail));
-articleRoute.patch('/:id', authenticate(), withAsync(updateArticle));
-articleRoute.delete('/:id', authenticate(), withAsync(deleteArticle));
-articleRoute.get('/', authenticate({ optional: true }), withAsync(getArticleList));
+articleRouter.post('/', authenticate(), withAsync(createArticle));
+articleRouter.get('/:id', authenticate({ optional: true }), withAsync(getArticleDetail));
+articleRouter.patch('/:id', authenticate(), withAsync(updateArticle));
+articleRouter.delete('/:id', authenticate(), withAsync(deleteArticle));
+articleRouter.get('/', authenticate({ optional: true }), withAsync(getArticleList));
 
-export default articleRoute;
+export default articleRouter;
