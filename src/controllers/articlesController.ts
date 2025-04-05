@@ -4,6 +4,7 @@ import { CreateArticleBodyStruct, UpdateArticleBodyStruct } from '../structs/art
 import { request, Request, Response } from 'express';
 import {
   createArticleService,
+  deleteArticleServiec,
   getArticleService,
   updateArticleService,
 } from '../services/articlesService';
@@ -45,4 +46,21 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
   const updatedArticle = await updateArticleService(id, data);
 
   res.status(200).json(updatedArticle);
+};
+
+export const deleteArticle = async (req: Request, res: Response): Promise<void> => {
+  if (!req.user) {
+    throw new UnauthorizedError('credentials_required', { message: 'Unauthorized' });
+  }
+  const { id } = create(req.params, IdParamsStruct);
+  const article = await getArticleService(id);
+
+  if (article.userId !== req.user.id) {
+    throw new ForbiddenError('Should be the owner of the article');
+  }
+
+  await deleteArticleServiec(id);
+
+  res.status(204).json();
+  return;
 };

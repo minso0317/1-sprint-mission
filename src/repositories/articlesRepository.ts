@@ -13,9 +13,15 @@ export async function getById(id: number): Promise<Article | null> {
   });
 }
 
-export async function update(id: number, data: Prisma.ArticleUpdateInput): Promise<Article> {
+export async function updateArticle(id: number, data: Prisma.ArticleUpdateInput): Promise<Article> {
   return await prismaClient.article.update({
     where: { id },
     data,
+  });
+}
+
+export async function deleteArticle(id: number): Promise<Article> {
+  return await prismaClient.article.delete({
+    where: { id },
   });
 }

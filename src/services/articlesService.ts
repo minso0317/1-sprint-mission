@@ -1,6 +1,11 @@
 import { CreateArticleDTO, GetArticleDTO, UpdateArticleDTO } from '../DTO/articleDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
-import { createArticle, getById, update } from '../repositories/articlesRepository';
+import {
+  createArticle,
+  deleteArticle,
+  getById,
+  updateArticle,
+} from '../repositories/articlesRepository';
 
 export const createArticleService = async (
   data: CreateArticleDTO,
@@ -38,5 +43,15 @@ export const updateArticleService = async (
     throw new NotFoundError('article', id);
   }
 
-  return await update(id, data);
+  return await updateArticle(id, data);
+};
+
+export const deleteArticleServiec = async (id: number): Promise<void> => {
+  const existingArticle = await getById(id);
+
+  if (!existingArticle) {
+    throw new NotFoundError('article', id);
+  }
+
+  await deleteArticle(id);
 };
