@@ -1,5 +1,7 @@
-interface TokenPayload {
+export interface TokenPayload {
   id: number;
 }
 
-export default TokenPayload;
+export interface TokenPair {
+  accessToken: string;
+}

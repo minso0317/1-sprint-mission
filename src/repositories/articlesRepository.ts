@@ -1,27 +1,21 @@
 import { Article, Prisma } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
 
-async function createArticle(data: Prisma.ArticleCreateInput) {
+export async function createArticle(data: Prisma.ArticleCreateInput): Promise<Article> {
   return await prismaClient.article.create({
     data,
   });
 }
 
-async function getById(id: number) {
+export async function getById(id: number): Promise<Article | null> {
   return await prismaClient.article.findUnique({
     where: { id },
   });
 }
 
-async function update(id: number, data: Prisma.ArticleUpdateInput) {
+export async function update(id: number, data: Prisma.ArticleUpdateInput): Promise<Article> {
   return await prismaClient.article.update({
     where: { id },
     data,
   });
 }
-
-export default {
-  createArticle,
-  getById,
-  update,
-};

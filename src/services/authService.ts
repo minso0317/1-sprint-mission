@@ -1,11 +1,10 @@
 import bcrypt from 'bcrypt';
-
-import authRepository from '../repositories/authRepository';
 import BadRequestError from '../lib/errors/BadRequestError';
 import { CreateUserDTO, LoginUserDTO, userResponseDTO, UserResponseDTO } from '../DTO/userDTO';
 import { generateTokens } from '../lib/token';
 import { ACCESS_TOKEN_COOKIE_NAME, NODE_ENV } from '../lib/constants';
 import { Response } from 'express';
+import { findByEmail, save } from '../repositories/authRepository';
 
 export async function register(data: CreateUserDTO): Promise<UserResponseDTO> {
   const password = data.password;
@@ -15,13 +14,13 @@ export async function register(data: CreateUserDTO): Promise<UserResponseDTO> {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const isExist = await authRepository.findByEmail(email);
+  const isExist = await findByEmail(email);
 
   if (isExist) {
     throw new BadRequestError('User already exist');
   }
 
-  const user = await authRepository.save({
+  const user = await save({
     email,
     nickname,
     password: hashedPassword,
@@ -33,7 +32,7 @@ export async function register(data: CreateUserDTO): Promise<UserResponseDTO> {
 export async function login(data: LoginUserDTO, res: Response): Promise<void> {
   const { email, password } = data;
 
-  const user = await authRepository.findByEmail(email);
+  const user = await findByEmail(email);
   if (!user) {
     throw new BadRequestError('Invalid credentials');
   }
@@ -43,11 +42,11 @@ export async function login(data: LoginUserDTO, res: Response): Promise<void> {
     throw new BadRequestError('Invalid credentials');
   }
 
-  const { accessToken } = generateTokens(user.id);
+  const { accessToken } = await generateTokens(user.id);
   setTokenCookies(res, accessToken);
 }
 
-export function setTokenCookies(res: Response, accessToken: string) {
+export function setTokenCookies(res: Response, accessToken: string): void {
   res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
     httpOnly: true,
     secure: NODE_ENV === 'production',

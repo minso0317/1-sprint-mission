@@ -1,8 +1,7 @@
 import express from 'express';
 import { withAsync } from '../lib/withAsync';
 import { createArticle, getArticle, updateArticle } from '../controllers/articlesController';
-import authenticate from '../middlewares/authenticate';
-import { optional } from 'superstruct';
+import { authenticate } from '../middlewares/authenticate';
 
 const articleRoute = express.Router();
 

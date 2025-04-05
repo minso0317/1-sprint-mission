@@ -8,7 +8,6 @@ import {
   updateArticleService,
 } from '../services/articlesService';
 import { IdParamsStruct } from '../structs/commonStructs';
-import { GetArticleDTO } from '../DTO/articleDTO';
 import ForbiddenError from '../lib/errors/ForbiddenError';
 
 export const createArticle = async (req: Request, res: Response): Promise<void> => {

@@ -2,7 +2,7 @@ import { User } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
 import { CreateUserDTO } from '../DTO/userDTO';
 
-async function findById(id: number) {
+export async function findById(id: number): Promise<User | null> {
   return await prismaClient.user.findUnique({
     where: {
       id,
@@ -10,7 +10,7 @@ async function findById(id: number) {
   });
 }
 
-async function findByEmail(email: string) {
+export async function findByEmail(email: string): Promise<User | null> {
   return await prismaClient.user.findUnique({
     where: {
       email,
@@ -18,7 +18,7 @@ async function findByEmail(email: string) {
   });
 }
 
-async function save(user: CreateUserDTO) {
+export async function save(user: CreateUserDTO): Promise<User> {
   return await prismaClient.user.create({
     data: {
       email: user.email,
@@ -28,7 +28,7 @@ async function save(user: CreateUserDTO) {
   });
 }
 
-async function update(id: number, data: User) {
+export async function update(id: number, data: User): Promise<User> {
   return await prismaClient.user.update({
     where: {
       id,
@@ -36,19 +36,3 @@ async function update(id: number, data: User) {
     data: data,
   });
 }
-
-// async function createOrUpdate(provider, providerId: string, email: string, nickname: string) {
-//   return await prismaClient.user.upsert({
-//     where: { provider, providerId },
-//     update: { email, nickname },
-//     create: { provider, providerId, email, nickname },
-//   });
-// }
-
-export default {
-  findById,
-  findByEmail,
-  save,
-  update,
-  // createOrUpdate,
-};

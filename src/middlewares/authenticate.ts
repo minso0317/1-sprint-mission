@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { ACCESS_TOKEN_COOKIE_NAME } from '../lib/constants';
 import { verifyAccessToken } from '../lib/token';
-import authRepository from '../repositories/authRepository';
+import { findById } from '../repositories/authRepository';
 
-function authenticate(options = { optional: false }) {
+export function authenticate(options = { optional: false }) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const accessToken = req.cookies[ACCESS_TOKEN_COOKIE_NAME]; // cook에서 토큰 꺼냄
     if (!accessToken && options.optional) {
@@ -17,7 +17,7 @@ function authenticate(options = { optional: false }) {
 
     try {
       const { userId } = verifyAccessToken(accessToken);
-      const user = await authRepository.findById(userId);
+      const user = await findById(userId);
 
       if (!user) {
         res.status(401).json({ message: 'Unauthorized' });
@@ -35,5 +35,3 @@ function authenticate(options = { optional: false }) {
     }
   };
 }
-
-export default authenticate;
