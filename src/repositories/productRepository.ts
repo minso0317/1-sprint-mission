@@ -6,3 +6,9 @@ export async function createProduct(data: Prisma.ProductCreateInput): Promise<Pr
     data,
   });
 }
+
+export async function getById(id: number): Promise<Product | null> {
+  return await prismaClient.product.findUnique({
+    where: { id },
+  });
+}

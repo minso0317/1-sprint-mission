@@ -1,5 +1,6 @@
 import { CreateProductDTO } from '../DTO/productDTO';
-import { createProduct } from '../repositories/productRepository';
+import NotFoundError from '../lib/errors/NotFoundError';
+import { createProduct, getById } from '../repositories/productRepository';
 
 export async function createProductService(
   data: CreateProductDTO,
@@ -15,4 +16,14 @@ export async function createProductService(
   };
 
   return await createProduct(productData);
+}
+
+export async function getProductService(id: number) {
+  const product = await getById(id);
+
+  if (!product) {
+    throw new NotFoundError('product', id);
+  }
+
+  return product;
 }
