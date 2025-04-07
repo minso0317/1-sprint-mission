@@ -71,3 +71,9 @@ export async function getById(id: number): Promise<Comment | null> {
     where: { id },
   });
 }
+
+export async function deleteComment(id: number): Promise<Comment> {
+  return prismaClient.comment.delete({
+    where: { id },
+  });
+}
