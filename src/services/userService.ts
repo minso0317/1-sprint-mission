@@ -1,11 +1,13 @@
-import { getById, updateMe } from '../repositories/userRepository';
+import { getByUserId, getMyProductList, updateMe } from '../repositories/userRepository';
 import { UserWithoutPassword } from '../types/user';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
-import { passwordDTO, updateUserDTO } from '../DTO/userDTO';
+import { updateUserDTO } from '../DTO/userDTO';
 import bcrypt from 'bcrypt';
+import { ParamsDTO } from '../DTO/commonDTO';
+import Product from '../types/product';
 
 export async function getMeService(userId: number): Promise<UserWithoutPassword> {
-  const user = await getById(userId);
+  const user = await getByUserId(userId);
 
   if (!user) {
     throw new UnauthorizedError('Unauthorized');
@@ -17,7 +19,7 @@ export async function getMeService(userId: number): Promise<UserWithoutPassword>
 }
 
 export async function updateMeService(userId: number, data: updateUserDTO) {
-  const user = await getById(userId);
+  const user = await getByUserId(userId);
 
   if (!user) {
     throw new UnauthorizedError('Unauthorized');
@@ -33,8 +35,8 @@ export async function updateMyPasswordService(
   userId: number,
   password: string,
   newPassword: string,
-) {
-  const user = await getById(userId);
+): Promise<void> {
+  const user = await getByUserId(userId);
 
   if (!user) {
     throw new UnauthorizedError('Unauthorized');
@@ -50,4 +52,20 @@ export async function updateMyPasswordService(
   const hashedPassword = await bcrypt.hash(newPassword, salt);
 
   await updateMe(userId, { password: hashedPassword });
+}
+
+export async function getMyProductListService(
+  userId: number,
+  params: ParamsDTO,
+): Promise<{ products: Product[] }> {
+  const { page, pageSize, orderBy = 'recent', keyword } = params;
+  const where = keyword
+    ? {
+        OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
+      }
+    : {};
+
+  const products = await getMyProductList(userId, page, pageSize, orderBy, where);
+
+  return { products };
 }

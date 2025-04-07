@@ -1,7 +1,17 @@
 import { Request, Response } from 'express';
-import { getMeService, updateMeService, updateMyPasswordService } from '../services/userService';
+import {
+  getMeService,
+  getMyProductListService,
+  updateMeService,
+  updateMyPasswordService,
+} from '../services/userService';
 import { create } from 'superstruct';
-import { UpdateMeBodyStruct, UpdatePasswordBodyStruct } from '../structs/usersStructs';
+import {
+  GetMyProductListParamsStruct,
+  UpdateMeBodyStruct,
+  UpdatePasswordBodyStruct,
+} from '../structs/usersStructs';
+import UnauthorizedError from '../lib/errors/UnauthorizedError';
 
 export const getMe = async (req: Request, res: Response): Promise<void> => {
   const user = await getMeService(req.user.id);
@@ -22,4 +32,14 @@ export async function updateMyPassword(req: Request, res: Response): Promise<voi
 
   await updateMyPasswordService(req.user.id, password, newPassword);
   res.status(200).json({ message: 'Password change successful' });
+}
+
+export async function getMyProductList(req: Request, res: Response): Promise<void> {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const params = create(req.query, GetMyProductListParamsStruct);
+  const result = await getMyProductListService(req.user.id, params);
+  res.send(result);
 }

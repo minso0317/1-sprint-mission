@@ -26,7 +26,7 @@ export async function getProductComment(
   cursor?: number,
   limit: number = 10,
 ): Promise<Comment[]> {
-  return prismaClient.comment.findMany({
+  return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
     where: { productId },
@@ -52,7 +52,7 @@ export async function getArticleComment(
   cursor?: number,
   limit: number = 10,
 ): Promise<Comment[]> {
-  return prismaClient.comment.findMany({
+  return await prismaClient.comment.findMany({
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
     where: { articleId },
