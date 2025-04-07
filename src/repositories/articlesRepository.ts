@@ -1,5 +1,7 @@
-import { Article, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
+import Article from '../types/article';
+import { ParamsDTO } from '../DTO/commonDTO';
 
 export async function createArticle(data: Prisma.ArticleCreateInput): Promise<Article> {
   return await prismaClient.article.create({
@@ -31,6 +33,6 @@ export async function getArticles(args: {
   take: number;
   orderBy: Prisma.ArticleOrderByWithRelationInput;
   where: Prisma.ArticleWhereInput;
-}) {
+}): Promise<Article[]> {
   return await prismaClient.article.findMany({ ...args });
 }

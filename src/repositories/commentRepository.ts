@@ -1,9 +1,10 @@
-import { Comment } from '@prisma/client';
+import { Comment, Prisma } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
 import {
   CreateArticleCommentDTO,
   CreateProductCommentDTO,
   GetProductCommentDTO,
+  UpdateCommentDTO,
 } from '../DTO/commentDTO';
 
 export async function createProductComment({
@@ -55,5 +56,18 @@ export async function getArticleComment(
     cursor: cursor ? { id: cursor } : undefined,
     take: limit + 1,
     where: { articleId },
+  });
+}
+
+export async function updateComment(id: number, data: Prisma.CommentUpdateInput): Promise<Comment> {
+  return prismaClient.comment.update({
+    where: { id },
+    data,
+  });
+}
+
+export async function getById(id: number): Promise<Comment | null> {
+  return prismaClient.comment.findFirst({
+    where: { id },
   });
 }

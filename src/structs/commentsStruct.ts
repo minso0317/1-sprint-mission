@@ -7,4 +7,6 @@ export const CreateCommentBodyStruct = object({
 
 export const GetCommentListParamsStruct = CursorParamsStruct;
 
-export const UpdateCommentBodyStruct = partial(CreateCommentBodyStruct);
+export const UpdateCommentBodyStruct = object({
+  content: nonempty(string()),
+});

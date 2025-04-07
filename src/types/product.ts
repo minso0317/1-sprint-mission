@@ -1,11 +1,11 @@
 interface Product {
-  id: Number;
-  name: String;
-  description: String;
-  price: Number;
-  tags: String[];
-  images: String[];
-  comments: Number;
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  tags: string[];
+  images: string[];
+  userId: number;
   createdAt: Date;
   updatedAt: Date;
 }

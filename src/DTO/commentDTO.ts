@@ -36,3 +36,8 @@ export interface GetProductCommentDTO {
   productId: number;
   userId: number;
 }
+
+export interface UpdateCommentDTO {
+  content: string;
+  userId?: number;
+}

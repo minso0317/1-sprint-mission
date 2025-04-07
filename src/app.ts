@@ -7,6 +7,7 @@ import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorC
 import authRouter from './routers/authRouer';
 import articleRouter from './routers/articleRouter';
 import productRouter from './routers/productRouter';
+import commentsRouter from './routers/commentsRouter';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(STATIC_PATH, express.static(path.resolve(process.cwd(), PUBLIC_PATH)));
 app.use('/auth', authRouter);
 app.use('/articles', articleRouter);
 app.use('/products', productRouter);
+app.use('/comments', commentsRouter);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);

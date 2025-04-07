@@ -1,5 +1,6 @@
-import { Prisma, Product } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
+import Product from '../types/product';
 
 export async function createProduct(data: Prisma.ProductCreateInput): Promise<Product> {
   return await prismaClient.product.create({
@@ -31,6 +32,6 @@ export async function getProduct(args: {
   take: number;
   orderBy: Prisma.ProductOrderByWithRelationInput;
   where: any;
-}) {
+}): Promise<Product[]> {
   return await prismaClient.product.findMany({ ...args });
 }
