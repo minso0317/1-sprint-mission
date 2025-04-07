@@ -66,8 +66,8 @@ export async function updateComment(id: number, data: Prisma.CommentUpdateInput)
   });
 }
 
-export async function getById(id: number): Promise<Comment | null> {
-  return prismaClient.comment.findFirst({
+export async function getByCommentId(id: number): Promise<Comment | null> {
+  return prismaClient.comment.findUnique({
     where: { id },
   });
 }

@@ -18,6 +18,8 @@ import { create } from 'superstruct';
 import { IdParamsStruct } from '../structs/commonStructs';
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
+import { getById } from '../repositories/productRepository';
+import NotFoundError from '../lib/errors/NotFoundError';
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -46,7 +48,11 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
   const { id } = create(req.params, IdParamsStruct);
   const { name, description, price, tags, images } = create(req.body, UpdateProductBodyStruct);
 
-  const product = await getProductService(id);
+  const product = await getById(id);
+
+  if (!product) {
+    throw new NotFoundError('product not found', id);
+  }
 
   if (product.userId !== req.user.id) {
     throw new ForbiddenError('Should be the owner of the product');
@@ -64,7 +70,11 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
 
   const { id } = create(req.params, IdParamsStruct);
 
-  const product = await getProductService(id);
+  const product = await getById(id);
+
+  if (!product) {
+    throw new NotFoundError('product not found', id);
+  }
 
   if (product.userId !== req.user.id) {
     throw new ForbiddenError('Should be the owner of the product');

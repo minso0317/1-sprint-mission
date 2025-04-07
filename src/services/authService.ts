@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import BadRequestError from '../lib/errors/BadRequestError';
 import { CreateUserDTO, LoginUserDTO, userResponseDTO, UserResponseDTO } from '../DTO/userDTO';
-import { generateTokens } from '../lib/token';
-import { ACCESS_TOKEN_COOKIE_NAME, NODE_ENV } from '../lib/constants';
-import { Response } from 'express';
-import { findByEmail, save } from '../repositories/authRepository';
+import { generateTokens, verifyRefreshToken } from '../lib/token';
+import { ACCESS_TOKEN_COOKIE_NAME, NODE_ENV, REFRESH_TOKEN_COOKIE_NAME } from '../lib/constants';
+import { Request, Response } from 'express';
+import { findByEmail, findById, save } from '../repositories/authRepository';
 
 export async function register(data: CreateUserDTO): Promise<UserResponseDTO> {
   const password = data.password;
@@ -42,12 +42,37 @@ export async function login(data: LoginUserDTO, res: Response): Promise<void> {
     throw new BadRequestError('Invalid credentials');
   }
 
-  const { accessToken } = await generateTokens(user.id);
-  setTokenCookies(res, accessToken);
+  const { accessToken, refreshToken } = await generateTokens(user.id);
+  setTokenCookies(res, accessToken, refreshToken);
 }
 
-export function setTokenCookies(res: Response, accessToken: string): void {
+export const refreshTokenService = async (req: Request, res: Response): Promise<void> => {
+  const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE_NAME];
+  if (!refreshToken) {
+    throw new BadRequestError('Invalid refresh token');
+  }
+
+  const { userId } = verifyRefreshToken(refreshToken);
+
+  const user = await findById(userId);
+  if (!user) {
+    throw new BadRequestError('Invalid refresh token');
+  }
+
+  const { accessToken, refreshToken: newRefreshToken } = await generateTokens(userId);
+  setTokenCookies(res, accessToken, newRefreshToken);
+
+  res.status(200).send();
+};
+
+export function setTokenCookies(res: Response, accessToken: string, refreshToken: string): void {
   res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+    httpOnly: true,
+    secure: NODE_ENV === 'production',
+    maxAge: 1 * 60 * 60 * 1000,
+  });
+
+  res.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
     httpOnly: true,
     secure: NODE_ENV === 'production',
     maxAge: 7 * 24 * 60 * 60 * 1000,

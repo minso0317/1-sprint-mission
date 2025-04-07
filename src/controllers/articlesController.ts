@@ -4,7 +4,7 @@ import {
   GetArticleListParamsStruct,
   UpdateArticleBodyStruct,
 } from '../structs/articlesStructs';
-import { request, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import {
   createArticleService,
   createCommentService,
@@ -18,6 +18,8 @@ import { IdParamsStruct } from '../structs/commonStructs';
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
+import { getById } from '../repositories/articlesRepository';
+import NotFoundError from '../lib/errors/NotFoundError';
 
 export const createArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -45,7 +47,11 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
 
   const { id } = create(req.params, IdParamsStruct);
   const data = create(req.body, UpdateArticleBodyStruct);
-  const article = await getArticleDetailService(id);
+  const article = await getById(id);
+
+  if (!article) {
+    throw new NotFoundError('article not found', id);
+  }
 
   if (article.userId !== req.user.id) {
     throw new ForbiddenError('Should be the owner of the article');
@@ -61,7 +67,11 @@ export const deleteArticle = async (req: Request, res: Response): Promise<void> 
     throw new UnauthorizedError('credentials_required');
   }
   const { id } = create(req.params, IdParamsStruct);
-  const article = await getArticleDetailService(id);
+  const article = await getById(id);
+
+  if (!article) {
+    throw new NotFoundError('article not found', id);
+  }
 
   if (article.userId !== req.user.id) {
     throw new ForbiddenError('Should be the owner of the article');

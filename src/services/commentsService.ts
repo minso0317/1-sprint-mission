@@ -1,13 +1,13 @@
 import { UpdateCommentDTO } from '../DTO/commentDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
-import { findById } from '../repositories/authRepository';
-import { deleteComment, updateComment } from '../repositories/commentRepository';
+import { deleteComment, getByCommentId, updateComment } from '../repositories/commentRepository';
 
 export async function updateCommentService(
   id: number,
   data: UpdateCommentDTO,
 ): Promise<UpdateCommentDTO> {
-  const existingComment = await findById(id);
+  const existingComment = await getByCommentId(id);
+
   if (!existingComment) {
     throw new NotFoundError('comment', id);
   }
@@ -15,11 +15,11 @@ export async function updateCommentService(
   return await updateComment(id, data);
 }
 
-export async function deleteCommentService(id: number) {
-  const existingComment = await findById(id);
+export async function deleteCommentService(id: number): Promise<void> {
+  const existingComment = await getByCommentId(id);
   if (!existingComment) {
     throw new NotFoundError('comment', id);
   }
 
-  return await deleteComment(id);
+  await deleteComment(id);
 }
