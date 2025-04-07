@@ -1,4 +1,4 @@
-interface User {
+export interface User {
   id: number;
   email: string;
   nickname: string;
@@ -8,4 +8,10 @@ interface User {
   updatedAt: Date;
 }
 
-export default User;
+export interface UserPayload {
+  id: number;
+}
+
+export type UserWithoutPassword = Partial<
+  Omit<User, 'id' | 'password' | 'createdAt' | 'updatedAt'>
+>;

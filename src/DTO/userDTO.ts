@@ -1,4 +1,4 @@
-import User from '../types/user';
+import { User } from '../types/user';
 
 export const userResponseDTO = (user: User) => {
   return {
@@ -28,5 +28,15 @@ export interface CreateUserDTO {
 
 export interface LoginUserDTO {
   email: string;
+  password: string;
+}
+
+export interface updateUserDTO {
+  email?: string;
+  nickname?: string;
+  image?: string | null;
+}
+
+export interface passwordDTO {
   password: string;
 }

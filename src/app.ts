@@ -8,6 +8,7 @@ import authRouter from './routers/authRouer';
 import articleRouter from './routers/articleRouter';
 import productRouter from './routers/productRouter';
 import commentsRouter from './routers/commentsRouter';
+import usersRouter from './routers/userRouter';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use('/auth', authRouter);
 app.use('/articles', articleRouter);
 app.use('/products', productRouter);
 app.use('/comments', commentsRouter);
+app.use('/users', usersRouter);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
