@@ -1,5 +1,6 @@
 import { Prisma, Product } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
+import { GetProductListDTO } from '../DTO/commonDTO';
 
 export async function createProduct(data: Prisma.ProductCreateInput): Promise<Product> {
   return await prismaClient.product.create({
@@ -7,9 +8,15 @@ export async function createProduct(data: Prisma.ProductCreateInput): Promise<Pr
   });
 }
 
-export async function getById(id: number): Promise<Product | null> {
+type ProductWithFavorite = Prisma.ProductGetPayload<{
+  include: { favorites: true };
+}>;
+export async function getById(id: number): Promise<ProductWithFavorite | null> {
   return await prismaClient.product.findUnique({
     where: { id },
+    include: {
+      favorites: true,
+    },
   });
 }
 
@@ -26,11 +33,21 @@ export async function deleteProduct(id: number): Promise<Product> {
   });
 }
 
-export async function getProduct(args: {
-  skip: number;
-  take: number;
-  orderBy: Prisma.ProductOrderByWithRelationInput;
-  where: any;
-}): Promise<Product[]> {
-  return await prismaClient.product.findMany({ ...args });
-}
+// export async function getProduct(args: {
+//   skip: number;
+//   take: number;
+//   orderBy: Prisma.ProductOrderByWithRelationInput;
+//   where: any;
+// }): Promise<Product[]> {
+//   return await prismaClient.product.findMany({ ...args });
+// }
+
+export const getProduct = ({ page, pageSize, orderBy, where }: GetProductListDTO) => {
+  return prismaClient.product.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
+    where,
+    include: { favorites: true },
+  });
+};

@@ -85,16 +85,6 @@ export const getArticleListService = async (
     title: keyword ? { contains: keyword } : undefined,
   };
 
-  // const articles = await getArticles({
-  //   skip: (page - 1) * pageSize,
-  //   take: pageSize,
-  //   orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
-  //   where,
-  //   include: {
-  //     likes: true
-  //   },
-  // });
-
   const articles = await getArticles({ page, pageSize, orderBy: 'recent', where });
 
   const articleList = articles.map((a) => likeArticleDTO(a, userId));

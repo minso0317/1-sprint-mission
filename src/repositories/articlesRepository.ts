@@ -33,15 +33,6 @@ export async function deleteArticle(id: number): Promise<Article> {
   });
 }
 
-// export async function getArticles(args: {
-//   skip: number;
-//   take: number;
-//   orderBy: Prisma.ArticleOrderByWithRelationInput;
-//   where: Prisma.ArticleWhereInput;
-// }): Promise<Article[]> {
-//   return await prismaClient.article.findMany({ ...args });
-// }
-
 export const getArticles = ({ page, pageSize, orderBy, where }: GetArticleListDTO) => {
   return prismaClient.article.findMany({
     skip: (page - 1) * pageSize,

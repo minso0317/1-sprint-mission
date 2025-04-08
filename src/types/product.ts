@@ -1,4 +1,4 @@
-interface Product {
+export interface Product {
   id: number;
   name: string;
   description: string;
@@ -10,4 +10,16 @@ interface Product {
   updatedAt: Date;
 }
 
-export default Product;
+export const productResponseDTO = (product: Product) => {
+  return {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    tags: product.tags,
+    images: product.images,
+    userId: product.userId,
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt,
+  };
+};

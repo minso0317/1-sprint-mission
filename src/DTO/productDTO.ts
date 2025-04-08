@@ -1,18 +1,4 @@
-import Product from '../types/product';
-
-export const productResponseDTO = (product: Product) => {
-  return {
-    id: product.id,
-    name: product.name,
-    description: product.description,
-    price: product.price,
-    tags: product.tags,
-    images: product.images,
-    userId: product.userId,
-    createdAt: product.createdAt,
-    updatedAt: product.updatedAt,
-  };
-};
+import { Product } from '@prisma/client';
 
 export interface CreateProductDTO {
   name: string;
@@ -29,6 +15,8 @@ export interface GetProductDTO {
   tags: string[];
   images: string[];
   userId: number;
+  favoriteCount: number;
+  isFavorited?: boolean;
 }
 
 export interface UpdateProductDTO {
@@ -38,3 +26,8 @@ export interface UpdateProductDTO {
   tags?: string[];
   images?: string[];
 }
+
+export type ProductFavoriteDTO = Product & {
+  favoriteCount: number;
+  isFavorited?: boolean;
+};

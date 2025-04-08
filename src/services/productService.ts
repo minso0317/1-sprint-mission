@@ -1,6 +1,12 @@
 import { CreateProductCommentDTO } from '../DTO/commentDTO';
-import { cursorPagenation, ParamsDTO } from '../DTO/commonDTO';
-import { CreateProductDTO, GetProductDTO, UpdateProductDTO } from '../DTO/productDTO';
+import { cursorPagenation, GetProductListDTO, ParamsDTO } from '../DTO/commonDTO';
+import { favoriteProductDTO } from '../DTO/favoriteDTO';
+import {
+  CreateProductDTO,
+  GetProductDTO,
+  ProductFavoriteDTO,
+  UpdateProductDTO,
+} from '../DTO/productDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
 import { createProductComment, getProductComment } from '../repositories/commentRepository';
 import {
@@ -27,14 +33,25 @@ export async function createProductService(
   return await createProduct(productData);
 }
 
-export async function getProductService(id: number): Promise<GetProductDTO> {
-  const product = await getById(id);
+export async function getProductService(
+  productId: number,
+  userId?: number,
+): Promise<ProductFavoriteDTO> {
+  const product = await getById(productId);
 
   if (!product) {
-    throw new NotFoundError('product', id);
+    throw new NotFoundError('product', productId);
   }
 
-  return product;
+  const isFavorited = userId
+    ? product.favorites.some((favorite) => favorite.userId === userId)
+    : undefined;
+
+  return {
+    ...product,
+    favoriteCount: product.favorites.length,
+    isFavorited,
+  };
 }
 
 export async function updateProductService(
@@ -60,29 +77,23 @@ export async function deleteProductService(id: number) {
   return await deleteProduct(id);
 }
 
-export async function getProductListService({
-  page,
-  pageSize,
-  orderBy,
-  keyword,
-}: ParamsDTO): Promise<GetProductDTO[]> {
-  const where = keyword
+export async function getProductListService(
+  params: ParamsDTO,
+  userId?: number,
+): Promise<GetProductDTO[]> {
+  const { page, pageSize, orderBy, keyword } = params;
+
+  const where: GetProductListDTO['where'] = keyword
     ? {
-        OR: [
-          { name: { contains: keyword, mode: 'insensitive' } },
-          { description: { contains: keyword, mode: 'insensitive' } },
-        ],
+        OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
       }
-    : undefined;
+    : {};
 
-  const products = await getProduct({
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    orderBy: orderBy === 'recent' ? { id: 'desc' } : { id: 'asc' },
-    where,
-  });
+  const products = await getProduct({ page, pageSize, orderBy: 'recent', where });
 
-  return products;
+  const productList = products.map((a) => favoriteProductDTO(a, userId));
+
+  return productList;
 }
 
 export async function createCommentService({

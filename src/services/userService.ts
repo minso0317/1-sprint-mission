@@ -4,7 +4,7 @@ import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import { updateUserDTO } from '../DTO/userDTO';
 import bcrypt from 'bcrypt';
 import { ParamsDTO } from '../DTO/commonDTO';
-import Product from '../types/product';
+import { Product } from '../types/product';
 
 export async function getMeService(userId: number): Promise<UserWithoutPassword> {
   const user = await getByUserId(userId);

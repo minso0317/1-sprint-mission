@@ -21,3 +21,10 @@ export interface GetArticleListDTO {
   orderBy: 'recent' | 'oldest';
   where: Prisma.ArticleWhereInput;
 }
+
+export interface GetProductListDTO {
+  page: number;
+  pageSize: number;
+  orderBy: 'recent' | 'oldest';
+  where: Prisma.ProductWhereInput;
+}

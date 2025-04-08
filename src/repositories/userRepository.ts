@@ -1,6 +1,6 @@
 import { Prisma, User } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
-import Product from '../types/product';
+import { Product } from '../types/product';
 
 export async function getByUserId(id: number): Promise<User | null> {
   return await prismaClient.user.findUnique({
