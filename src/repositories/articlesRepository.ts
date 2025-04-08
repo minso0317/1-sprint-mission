@@ -1,5 +1,6 @@
 import { Article, Prisma } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
+import { GetArticleListDTO } from '../DTO/commonDTO';
 
 export async function createArticle(data: Prisma.ArticleCreateInput): Promise<Article> {
   return await prismaClient.article.create({
@@ -7,9 +8,15 @@ export async function createArticle(data: Prisma.ArticleCreateInput): Promise<Ar
   });
 }
 
-export async function getById(id: number): Promise<Article | null> {
+type ArticleWithLikes = Prisma.ArticleGetPayload<{
+  include: { likes: true };
+}>;
+export async function getById(id: number): Promise<ArticleWithLikes | null> {
   return await prismaClient.article.findUnique({
     where: { id },
+    include: {
+      likes: true,
+    },
   });
 }
 
@@ -26,11 +33,21 @@ export async function deleteArticle(id: number): Promise<Article> {
   });
 }
 
-export async function getArticles(args: {
-  skip: number;
-  take: number;
-  orderBy: Prisma.ArticleOrderByWithRelationInput;
-  where: Prisma.ArticleWhereInput;
-}): Promise<Article[]> {
-  return await prismaClient.article.findMany({ ...args });
-}
+// export async function getArticles(args: {
+//   skip: number;
+//   take: number;
+//   orderBy: Prisma.ArticleOrderByWithRelationInput;
+//   where: Prisma.ArticleWhereInput;
+// }): Promise<Article[]> {
+//   return await prismaClient.article.findMany({ ...args });
+// }
+
+export const getArticles = ({ page, pageSize, orderBy, where }: GetArticleListDTO) => {
+  return prismaClient.article.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
+    where,
+    include: { likes: true },
+  });
+};

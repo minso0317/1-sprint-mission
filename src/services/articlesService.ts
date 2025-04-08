@@ -1,6 +1,12 @@
-import { CreateArticleDTO, GetArticleDTO, UpdateArticleDTO } from '../DTO/articleDTO';
+import {
+  ArticleLikeDTO,
+  CreateArticleDTO,
+  GetArticleDTO,
+  UpdateArticleDTO,
+} from '../DTO/articleDTO';
 import { CreateArticleCommentDTO } from '../DTO/commentDTO';
 import { cursorPagenation, ParamsDTO } from '../DTO/commonDTO';
+import { likeArticleDTO } from '../DTO/likeDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
 import {
   createArticle,
@@ -27,14 +33,23 @@ export const createArticleService = async (
   return await createArticle(articleData);
 };
 
-export const getArticleDetailService = async (id: number): Promise<GetArticleDTO> => {
-  const article = await getById(id);
+export const getArticleDetailService = async (
+  articleId: number,
+  userId?: number,
+): Promise<ArticleLikeDTO> => {
+  const article = await getById(articleId);
 
   if (!article) {
-    throw new NotFoundError('article', id);
+    throw new NotFoundError('article', articleId);
   }
 
-  return article;
+  const isLiked = userId ? article.likes.some((like) => like.userId === userId) : undefined;
+
+  return {
+    ...article,
+    likeCount: article.likes.length,
+    isLiked,
+  };
 };
 
 export const updateArticleService = async (
@@ -60,24 +75,31 @@ export const deleteArticleServiec = async (id: number): Promise<void> => {
   await deleteArticle(id);
 };
 
-export const getArticleListService = async ({
-  page,
-  pageSize,
-  orderBy,
-  keyword,
-}: ParamsDTO): Promise<GetArticleDTO[]> => {
+export const getArticleListService = async (
+  params: ParamsDTO,
+  userId?: number,
+): Promise<GetArticleDTO[]> => {
+  const { page, pageSize, orderBy, keyword } = params;
+
   const where = {
     title: keyword ? { contains: keyword } : undefined,
   };
 
-  const articles = await getArticles({
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-    orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
-    where,
-  });
+  // const articles = await getArticles({
+  //   skip: (page - 1) * pageSize,
+  //   take: pageSize,
+  //   orderBy: orderBy === 'recent' ? { createdAt: 'desc' } : { id: 'asc' },
+  //   where,
+  //   include: {
+  //     likes: true
+  //   },
+  // });
 
-  return articles;
+  const articles = await getArticles({ page, pageSize, orderBy: 'recent', where });
+
+  const articleList = articles.map((a) => likeArticleDTO(a, userId));
+
+  return articleList;
 };
 
 export async function createCommentService({

@@ -1,16 +1,4 @@
-import Article from '../types/article';
-
-export const articleResponseDTO = (article: Article) => {
-  return {
-    id: article.id,
-    title: article.title,
-    content: article.content,
-    image: article.image,
-    userId: article.userId,
-    createdAt: article.createdAt,
-    updatedAt: article.updatedAt,
-  };
-};
+import { Article } from '@prisma/client';
 
 export interface CreateArticleDTO {
   title: string;
@@ -23,6 +11,8 @@ export interface GetArticleDTO {
   content: string;
   image: string | null;
   userId: number;
+  likeCount: number;
+  isLiked?: boolean;
 }
 
 export interface UpdateArticleDTO {
@@ -30,3 +20,8 @@ export interface UpdateArticleDTO {
   content?: string;
   image?: string | null;
 }
+
+export type ArticleLikeDTO = Article & {
+  likeCount: number;
+  isLiked?: boolean;
+};
