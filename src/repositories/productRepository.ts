@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Product } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
-import Product from '../types/product';
 
 export async function createProduct(data: Prisma.ProductCreateInput): Promise<Product> {
   return await prismaClient.product.create({

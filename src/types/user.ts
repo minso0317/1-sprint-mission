@@ -12,6 +12,4 @@ export interface UserPayload {
   id: number;
 }
 
-export type UserWithoutPassword = Partial<
-  Omit<User, 'id' | 'password' | 'createdAt' | 'updatedAt'>
->;
+export type UserWithoutPassword = Omit<User, 'id' | 'password' | 'createdAt' | 'updatedAt'>;

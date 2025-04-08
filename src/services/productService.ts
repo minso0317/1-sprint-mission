@@ -1,4 +1,3 @@
-import { Comment } from '@prisma/client';
 import { CreateProductCommentDTO } from '../DTO/commentDTO';
 import { cursorPagenation, ParamsDTO } from '../DTO/commonDTO';
 import { CreateProductDTO, GetProductDTO, UpdateProductDTO } from '../DTO/productDTO';

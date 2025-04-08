@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
-import { User } from '../types/user';
 import Product from '../types/product';
 
 export async function getByUserId(id: number): Promise<User | null> {

@@ -1,7 +1,5 @@
-import { Prisma } from '@prisma/client';
+import { Article, Prisma } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
-import Article from '../types/article';
-import { ParamsDTO } from '../DTO/commonDTO';
 
 export async function createArticle(data: Prisma.ArticleCreateInput): Promise<Article> {
   return await prismaClient.article.create({

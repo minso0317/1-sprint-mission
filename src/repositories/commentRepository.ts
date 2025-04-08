@@ -1,11 +1,6 @@
 import { Comment, Prisma } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
-import {
-  CreateArticleCommentDTO,
-  CreateProductCommentDTO,
-  GetProductCommentDTO,
-  UpdateCommentDTO,
-} from '../DTO/commentDTO';
+import { CreateArticleCommentDTO, CreateProductCommentDTO } from '../DTO/commentDTO';
 
 export async function createProductComment({
   productId,
