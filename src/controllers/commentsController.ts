@@ -15,15 +15,11 @@ export const updateComment = async (req: Request, res: Response): Promise<void> 
 
   const { id } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, UpdateCommentBodyStruct);
-  console.log('id1:', id);
   const comment = await getByCommentId(id);
-  console.log('id2:', id);
 
   if (!comment) {
     throw new NotFoundError('Comment not found', id);
   }
-  console.log('userId:', comment.userId);
-  console.log('req.user.id:', req.user.id);
 
   if (comment.userId !== req.user.id) {
     throw new ForbiddenError('Should be the owner of the comment');

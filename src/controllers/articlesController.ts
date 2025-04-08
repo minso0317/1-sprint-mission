@@ -20,6 +20,7 @@ import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import { getById } from '../repositories/articlesRepository';
 import NotFoundError from '../lib/errors/NotFoundError';
+import { createLikeService, deleteLikeService } from '../services/likeService';
 
 export const createArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -115,4 +116,21 @@ export const getCommentList = async (req: Request, res: Response): Promise<void>
   });
 
   res.status(200).json({ list: comments, nextCursor });
+};
+
+export const createLike = async (req: Request, res: Response) => {
+  const { id: articleId } = create(req.params, IdParamsStruct);
+  const userId = req.user.id;
+
+  const createLike = createLikeService(articleId, userId);
+  res.status(201).json(createLike);
+};
+
+export const deleteLike = async (req: Request, res: Response) => {
+  const { id: productId } = create(req.params, IdParamsStruct);
+  const userId = req.user.id;
+
+  const deleteLike = await deleteLikeService(productId, userId);
+
+  res.status(200).json(deleteLike);
 };

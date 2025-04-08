@@ -19,13 +19,10 @@ export interface CreateArticleDTO {
 }
 
 export interface GetArticleDTO {
-  id: number;
   title: string;
   content: string;
   image: string | null;
   userId: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface UpdateArticleDTO {

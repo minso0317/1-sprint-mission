@@ -23,15 +23,12 @@ export interface CreateProductDTO {
 }
 
 export interface GetProductDTO {
-  id: number;
   name: string;
   description: string;
   price: number;
   tags: string[];
   images: string[];
   userId: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface UpdateProductDTO {

@@ -8,6 +8,8 @@ import {
   updateArticle,
   createComment,
   getCommentList,
+  createLike,
+  deleteLike,
 } from '../controllers/articlesController';
 import { authenticate } from '../middlewares/authenticate';
 
@@ -20,5 +22,7 @@ articleRouter.delete('/:id', authenticate(), withAsync(deleteArticle));
 articleRouter.get('/', authenticate({ optional: true }), withAsync(getArticleList));
 articleRouter.post('/:id/comments', authenticate(), withAsync(createComment));
 articleRouter.get('/:id/comments', authenticate({ optional: true }), withAsync(getCommentList));
+articleRouter.post('/:id/likes', authenticate(), withAsync(createLike));
+articleRouter.delete('/:id/likes', authenticate(), withAsync(deleteLike));
 
 export default articleRouter;

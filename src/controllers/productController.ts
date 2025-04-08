@@ -20,6 +20,7 @@ import ForbiddenError from '../lib/errors/ForbiddenError';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
 import { getById } from '../repositories/productRepository';
 import NotFoundError from '../lib/errors/NotFoundError';
+import { createFavoriteService, deleteFavoriteService } from '../services/favoritesService';
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -117,4 +118,22 @@ export const getCommentList = async (req: Request, res: Response): Promise<void>
   });
 
   res.status(200).json({ list: comments, nextCursor });
+};
+
+export const createFavorite = async (req: Request, res: Response) => {
+  const { id: productId } = create(req.params, IdParamsStruct);
+  const userId = req.user.id;
+
+  const createFavorite = await createFavoriteService(productId, userId);
+
+  res.status(200).json(createFavorite);
+};
+
+export const deleteFavorite = async (req: Request, res: Response) => {
+  const { id: productId } = create(req.params, IdParamsStruct);
+  const userId = req.user.id;
+
+  const deleteFavorite = await deleteFavoriteService(productId, userId);
+
+  res.status(200).json(deleteFavorite);
 };
