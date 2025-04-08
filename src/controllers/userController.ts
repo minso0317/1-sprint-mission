@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import {
   getMeService,
+  getMyFavoriteListService,
   getMyProductListService,
   updateMeService,
   updateMyPasswordService,
 } from '../services/userService';
 import { create } from 'superstruct';
 import {
+  GetMyFavoriteListParamsStruct,
   GetMyProductListParamsStruct,
   UpdateMeBodyStruct,
   UpdatePasswordBodyStruct,
@@ -41,5 +43,12 @@ export async function getMyProductList(req: Request, res: Response): Promise<voi
 
   const params = create(req.query, GetMyProductListParamsStruct);
   const result = await getMyProductListService(req.user.id, params);
-  res.send(result);
+  res.status(200).json(result);
+}
+
+export async function getMyFavoriteList(req: Request, res: Response): Promise<void> {
+  const { page, pageSize, orderBy, keyword } = create(req.query, GetMyFavoriteListParamsStruct);
+  const result = await getMyFavoriteListService(req.user.id, { page, pageSize, orderBy, keyword });
+
+  res.status(200).json(result);
 }

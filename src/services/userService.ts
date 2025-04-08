@@ -1,10 +1,17 @@
-import { getByUserId, getMyProductList, updateMe } from '../repositories/userRepository';
+import {
+  getByUserId,
+  getFavoriteProduct,
+  getMyProductList,
+  updateMe,
+} from '../repositories/userRepository';
 import { UserWithoutPassword } from '../types/user';
 import UnauthorizedError from '../lib/errors/UnauthorizedError';
 import { updateUserDTO } from '../DTO/userDTO';
 import bcrypt from 'bcrypt';
 import { ParamsDTO } from '../DTO/commonDTO';
 import { Product } from '../types/product';
+import { favoriteProductDTO } from '../DTO/favoriteDTO';
+import { GetProductDTO } from '../DTO/productDTO';
 
 export async function getMeService(userId: number): Promise<UserWithoutPassword> {
   const user = await getByUserId(userId);
@@ -57,7 +64,7 @@ export async function updateMyPasswordService(
 export async function getMyProductListService(
   userId: number,
   params: ParamsDTO,
-): Promise<{ products: Product[] }> {
+): Promise<{ productList: GetProductDTO[] }> {
   const { page, pageSize, orderBy = 'recent', keyword } = params;
   const where = keyword
     ? {
@@ -67,5 +74,23 @@ export async function getMyProductListService(
 
   const products = await getMyProductList(userId, page, pageSize, orderBy, where);
 
-  return { products };
+  const productList = products.map((product) => favoriteProductDTO(product, userId));
+
+  return { productList };
+}
+
+export async function getMyFavoriteListService(
+  userId: number,
+  params: ParamsDTO,
+): Promise<{ productList: GetProductDTO[] }> {
+  const user = await getByUserId(userId);
+
+  if (!user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+  const products = await getFavoriteProduct(userId, params);
+
+  const productList = products.map((product) => favoriteProductDTO(product, userId));
+
+  return { productList };
 }

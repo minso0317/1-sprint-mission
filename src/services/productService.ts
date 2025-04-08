@@ -91,7 +91,7 @@ export async function getProductListService(
 
   const products = await getProduct({ page, pageSize, orderBy: 'recent', where });
 
-  const productList = products.map((a) => favoriteProductDTO(a, userId));
+  const productList = products.map((product) => favoriteProductDTO(product, userId));
 
   return productList;
 }

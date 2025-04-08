@@ -33,15 +33,6 @@ export async function deleteProduct(id: number): Promise<Product> {
   });
 }
 
-// export async function getProduct(args: {
-//   skip: number;
-//   take: number;
-//   orderBy: Prisma.ProductOrderByWithRelationInput;
-//   where: any;
-// }): Promise<Product[]> {
-//   return await prismaClient.product.findMany({ ...args });
-// }
-
 export const getProduct = ({ page, pageSize, orderBy, where }: GetProductListDTO) => {
   return prismaClient.product.findMany({
     skip: (page - 1) * pageSize,

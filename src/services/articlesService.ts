@@ -87,7 +87,7 @@ export const getArticleListService = async (
 
   const articles = await getArticles({ page, pageSize, orderBy: 'recent', where });
 
-  const articleList = articles.map((a) => likeArticleDTO(a, userId));
+  const articleList = articles.map((article) => likeArticleDTO(article, userId));
 
   return articleList;
 };

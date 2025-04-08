@@ -1,6 +1,6 @@
 import { Prisma, User } from '@prisma/client';
 import { prismaClient } from '../lib/prismaClient';
-import { Product } from '../types/product';
+import { ParamsDTO } from '../DTO/commonDTO';
 
 export async function getByUserId(id: number): Promise<User | null> {
   return await prismaClient.user.findUnique({
@@ -21,14 +21,40 @@ export async function getMyProductList(
   pageSize: number,
   orderBy: 'recent' | 'oldest',
   where: Prisma.ProductWhereInput,
-): Promise<Product[]> {
-  return prismaClient.product.findMany({
+) {
+  return await prismaClient.product.findMany({
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: orderBy === 'recent' ? { id: 'desc' } : { id: 'asc' },
     where: {
       ...where,
       userId,
+    },
+    include: {
+      favorites: true,
+    },
+  });
+}
+
+export async function getFavoriteProduct(userId: number, params: ParamsDTO) {
+  const { page, pageSize, orderBy, keyword } = params;
+
+  const where: Prisma.ProductWhereInput = {
+    ...(keyword && {
+      OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
+    }),
+    favorites: {
+      some: { userId },
+    },
+  };
+
+  return await prismaClient.product.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { id: 'desc' } : { id: 'asc' },
+    where,
+    include: {
+      favorites: true,
     },
   });
 }

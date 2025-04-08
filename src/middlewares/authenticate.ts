@@ -5,7 +5,7 @@ import { findById } from '../repositories/authRepository';
 
 export function authenticate(options = { optional: false }) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const accessToken = req.cookies[ACCESS_TOKEN_COOKIE_NAME]; // cook에서 토큰 꺼냄
+    const accessToken = req.cookies[ACCESS_TOKEN_COOKIE_NAME];
     if (!accessToken && options.optional) {
       return next();
     }
@@ -22,7 +22,7 @@ export function authenticate(options = { optional: false }) {
       if (!user) {
         res.status(401).json({ message: 'Unauthorized' });
         return;
-      } // null 일 때 에러메세지를 처리해줘서  user의 undefined와 타입에러 안나게 해준다.
+      }
 
       req.user = user;
       return next();
