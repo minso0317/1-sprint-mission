@@ -26,7 +26,7 @@ export const updateMe = async (req: Request, res: Response): Promise<void> => {
 
   const updatedMe = await updateMeService(req.user.id, data);
 
-  res.status(200).json(updateMe);
+  res.status(200).json(updatedMe);
 };
 
 export async function updateMyPassword(req: Request, res: Response): Promise<void> {
