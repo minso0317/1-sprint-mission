@@ -18,7 +18,6 @@ export default async function uploadImage(req: Request, res: Response): Promise<
     const { buffer, originalname, mimetype } = req.file;
     url = await uploadBufferToS3(buffer, originalname, mimetype);
   } else {
-    // 로컬 업로드된 파일 URL 구성
     const host = req.get('host');
     if (!host) {
       throw new BadRequestError('Host is required');
