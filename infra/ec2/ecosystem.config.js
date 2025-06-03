@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'mission10-app',
-      script: 'dist/app.js',
+      script: 'dist/main.js',
       // instances: 1,
       // exec_mode:
       watch: false,
