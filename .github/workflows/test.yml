@@ -15,11 +15,11 @@ jobs:
     # PostgreSQL 서비스를 Docker 컨테이너로 함께 실행
     services:
       postgres:
-        image: postgres:15 # PostgreSQL 15 버전 사용
+        image: postgres:14 # PostgreSQL 14 버전 사용
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
+          POSTGRES_USER: ${{ secrets.ENV.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.ENV.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.ENV.POSTGRES_DB }}
         ports:
           - 5432:5432 # 로컬에서 5432 포트를 통해 접근 가능
         options: >- # DB가 준비될 때까지 기다리는 설정 (헬스 체크)
@@ -29,18 +29,8 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Test1
-        run: |
-          ls
-          pwd
-
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Test2
-        run: |
-          ls
-          pwd
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -52,11 +42,6 @@ jobs:
 
       - name: Set up .nev
         run: echo "${{ secrets.ENV }}" > .env
-
-      - name: Test3
-        run: |
-          ls -a
-          cat .env
 
       - name: Apply DB Schema
         run: npm run prisma:migrate # Prisma 마이그레이션 적용 (testdb에 스키마 반영)
