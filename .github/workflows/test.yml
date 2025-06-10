@@ -18,7 +18,7 @@ jobs:
         image: postgres:14 # PostgreSQL 14 버전 사용
         env:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         ports:
           - 5432:5432 # 로컬에서 5432 포트를 통해 접근 가능
